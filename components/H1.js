@@ -1,16 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text} from 'react-native';
-import { useColorScheme } from 'react-native-appearance';
-import {
-    DefaultTheme,
-    DarkTheme,
-} from '@react-navigation/native';
+import { StyleSheet, Text } from 'react-native';
+import { Theme } from "../constants/Theme";
 
 const H1 = props => {
-    const scheme = useColorScheme();
-    const theme = scheme === 'dark' ? DarkTheme : DefaultTheme;
+    const theme = Theme();
     return (
-        <Text style={{...props.style, color: theme.colors.text, ...styles.h1}}>{props.children}</Text>
+        <Text style={{ color: theme.colors.text, ...styles.h1, ...props.style }}>{props.children}</Text>
     );
 };
 

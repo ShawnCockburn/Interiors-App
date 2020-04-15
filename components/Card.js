@@ -1,18 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useColorScheme } from 'react-native-appearance';
-import {
-    DefaultTheme,
-    DarkTheme
-} from '@react-navigation/native';
 
+import { Theme } from "../constants/Theme";
 
 const Card = props => {
-    const scheme = useColorScheme();
-    const theme = scheme === 'dark' ? DarkTheme : DefaultTheme;
+    const theme = Theme();
     return (
-        <View style={{ ...props.style, shadowColor: theme.colors.border, backgroundColor: theme.colors.card, ...styles.card }}>
-        {props.children}
+        <View style={{ shadowColor: theme.colors.border, backgroundColor: theme.colors.card, ...styles.card, ...props.style }}>
+            {props.children}
         </View>
     );
 };
