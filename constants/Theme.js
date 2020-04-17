@@ -5,21 +5,26 @@ import {
     DarkTheme,
 } from '@react-navigation/native';
 
-export const customDarkTheme = {...DarkTheme};
-export const customLightTheme = {...DefaultTheme};
+
+
+export const customDarkTheme = {
+    colors: {
+        primary: "rgb(10, 132, 255)",
+        background: "#121212",
+        card: "#272727",
+        text: "white",
+        border: "black"
+    },
+    dark: true,
+};
+export const customLightTheme = { ...DefaultTheme };
 
 export const Theme = () => {
     const scheme = useColorScheme();
     StatusBar.setBarStyle(scheme === 'dark' ? "light-content" : "dark-content");
-    return scheme === 'dark' ? customDarkTheme : customLightTheme;
+    let theme = scheme === 'dark' ? customDarkTheme : customLightTheme;
+    return theme;
 };
-
-
-
-
-
-    
-
 
 
 

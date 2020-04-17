@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 import P from "../components/P";
 import H3 from "../components/H3";
@@ -8,7 +8,7 @@ import ImageCard from "../components/ImageCard";
 import { FlatList } from 'react-native-gesture-handler';
 
 /**************test data***************/
-import { CATEGORIES, PROMOTIONS } from "../data/testData"
+import { CATEGORIES, PROMOTIONS } from "../data/testData";
 /**************************************/
 
 const HomeScreen = ({ route, navigation }) => {
@@ -42,41 +42,67 @@ const HomeScreen = ({ route, navigation }) => {
     //this adds 5px padding on first and last component of horizontal Flatlist
     const flatListHorizontalHeaderFooterComponant = <View style={{ width: 5 }}></View>;
 
+    //horizontal flatlist 
+    const HList = props => {
+        return (
+            <View>
+                <FlatList
+                    {...props}
+                    style={styles.flatListHorizontal}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
+                    ListFooterComponent={flatListHorizontalHeaderFooterComponant}
+                />
+            </View>
+        );
+    };
+
+    //section header text
+    const SectionHeader = props => {
+        return (
+            <View style={styles.screenPadding}>
+                <View style={styles.sectionText}>
+                    <H3>{props.children}</H3>
+                </View>
+            </View>
+        );
+    }
+
+    //todo: implement search
+    //if search is submitted
+    const onSubmitSearch = query => {
+        console.log(query);
+    }
+
     //Homepage JSX
     return (
-        <View style={styles.screen}>
+        <ScrollView style={styles.screen} keyboardShouldPersistTaps="never">
+
+            {/* SearchBar */}
+
             <View style={styles.screenPadding}>
                 <View style={styles.center}>
-                    <SearchBar />
-                </View>
-                <View style={styles.sectionText}>
-                    <H3>Categories</H3>
+                    <SearchBar onSubmitSearch={onSubmitSearch} />
                 </View>
             </View>
-            <View>
-                <FlatList
-                    ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
-                    ListFooterComponent={flatListHorizontalHeaderFooterComponant}
-                    horizontal={true} showsHorizontalScrollIndicator={false}
-                    style={styles.flatListHorizontal}
-                    data={CATEGORIES}
-                    renderItem={renderCategory} />
-            </View>
-            <View style={styles.screenPadding}>
-                <View style={styles.sectionText}>
-                    <H3>Promotions</H3>
-                </View>
-            </View>
-            <View>
-                <FlatList
-                    ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
-                    ListFooterComponent={flatListHorizontalHeaderFooterComponant}
-                    horizontal={true} showsHorizontalScrollIndicator={false}
-                    style={styles.flatListHorizontal}
-                    data={PROMOTIONS}
-                    renderItem={renderPromotion} />
-            </View>
-        </View>
+
+            {/* Categories */}
+
+            <SectionHeader>Categories</SectionHeader>
+            <HList
+                data={CATEGORIES}
+                renderItem={renderCategory}
+            />
+
+            {/* Promotions */}
+
+            <SectionHeader>Promotions</SectionHeader>
+            <HList
+                data={PROMOTIONS}
+                renderItem={renderPromotion}
+            />
+        </ScrollView>
     );
 };
 
