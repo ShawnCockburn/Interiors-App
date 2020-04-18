@@ -10,7 +10,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const SearchBar = props => {
     const theme = Theme();
-    const [isSearching, setIsSearching] = useState(false);
+    const [isSearching, setIsSearching] = useState(props.focus == undefined ? false : props.focus);
     const [searchTextValue, setSearchTextValue] = useState("");
 
     const searchInput = (
@@ -57,7 +57,7 @@ const SearchBar = props => {
     }
 
     return (
-        <Card style={{ ...props.style, ...styles.searchBar }} onPress={onSearchPress}>
+        <Card style={{ ...props.style, ...styles.searchBar }} onPress={props.onPress != undefined ? props.onPress : onSearchPress}>
             {isSearching ? searchInput : placeHolderText}
         </Card>
     );

@@ -4,6 +4,9 @@ import {
     DefaultTheme,
     DarkTheme,
 } from '@react-navigation/native';
+import { useSelector } from "react-redux";
+
+import { DARKMODE_OPTIONS } from "../data/settings";
 
 
 
@@ -13,17 +16,46 @@ export const customDarkTheme = {
         background: "#121212",
         card: "#272727",
         text: "white",
-        border: "black"
+        border: "black",
+        disabled: "rgba(255, 255, 255, 0.38)"
     },
     dark: true,
 };
-export const customLightTheme = { ...DefaultTheme };
+export const customLightTheme = {
+    colors: {
+        background: "rgb(242, 242, 242)",
+        border: "rgb(224, 224, 224)",
+        card: "rgb(255, 255, 255)",
+        primary: "rgb(0, 122, 255)",
+        text: "rgb(28, 28, 30)",
+        disabled: "#a1a1a1"
+    },
+    dark: false,
+
+};
+
 
 export const Theme = () => {
     const scheme = useColorScheme();
-    StatusBar.setBarStyle(scheme === 'dark' ? "light-content" : "dark-content");
-    let theme = scheme === 'dark' ? customDarkTheme : customLightTheme;
-    return theme;
+    const themeSettings = useSelector(state => state.settings.settings);
+
+    switch (themeSettings.darkmode) {
+        case DARKMODE_OPTIONS.LIGHT:
+            StatusBar.setBarStyle("dark-content");
+            return customLightTheme;
+
+        case DARKMODE_OPTIONS.DARK:
+            StatusBar.setBarStyle("light-content");
+            return customDarkTheme;
+
+        case DARKMODE_OPTIONS.AUTO:
+            StatusBar.setBarStyle(scheme === 'dark' ? "light-content" : "dark-content");
+            return scheme === 'dark' ? customDarkTheme : customLightTheme;
+
+        default:
+            StatusBar.setBarStyle(scheme === 'dark' ? "light-content" : "dark-content");
+            return scheme === 'dark' ? customDarkTheme : customLightTheme;
+    }
 };
 
 

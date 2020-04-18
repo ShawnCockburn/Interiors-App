@@ -3,11 +3,12 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 
 import { Theme } from "../constants/Theme";
 import HomeScreen from "../screens/HomeScreen";
 import ProductListScreen from '../screens/ProductListScreen';
+import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createStackNavigator();
@@ -27,6 +28,14 @@ export default () => {
         );
     };
 
+    const SearchStack = () => {
+        return (
+            <Stack.Navigator initialRouteName="Search">
+                <Stack.Screen name="Search" component={SearchScreen} />
+            </Stack.Navigator>
+        );
+    };
+
     const SettingsStack = () => {
         return (
             <Stack.Navigator initialRouteName="HomeScreen">
@@ -39,25 +48,26 @@ export default () => {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
-                    let iconName;
+                    let icon;
 
                     if (route.name === 'Home') {
-                        iconName = focused
-                            ? 'ios-home'
-                            : 'ios-home';
+                        icon = <AntDesign name="home" size={size} color={color} />;
+                    } else if (route.name === 'Search') {
+                        icon = <Ionicons name="md-search" size={size} color={color} />;
                     } else if (route.name === 'Settings') {
-                        iconName = focused ? 'ios-settings' : 'ios-settings';
+                        icon = <SimpleLineIcons name="settings" size={size} color={color} />;
                     }
 
-                    return <Ionicons name={iconName} size={size} color={color} />;
+                    return icon;
                 },
             })}
             tabBarOptions={{
                 activeTintColor: theme.colors.text,
-                inactiveTintColor: 'gray',
+                inactiveTintColor: 'gray'
             }}
         >
             <Tab.Screen name="Home" component={StandardStack} />
+            <Tab.Screen name="Search" component={SearchStack} />
             <Tab.Screen name="Settings" component={SettingsStack} />
         </Tab.Navigator>
     );

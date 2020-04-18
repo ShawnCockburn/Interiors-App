@@ -3,8 +3,17 @@ import * as Font from "expo-font"
 import { AppLoading } from 'expo';
 import { enableScreens } from "react-native-screens";
 import PageNavigator from "./navigation/PageNavigator"
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux"
+
+import settingsReducer from "./store/reducers/settings";
 
 enableScreens();
+
+const rootReducer = combineReducers({
+  settings: settingsReducer
+});
+const store = createStore(rootReducer);
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -21,7 +30,9 @@ export default function App() {
     return <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} />;
   } else {
     return (
-      <PageNavigator />
+      <Provider store={store}>
+        <PageNavigator />
+      </Provider>
     );
   }
 }

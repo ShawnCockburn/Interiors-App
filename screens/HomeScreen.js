@@ -8,7 +8,8 @@ import ImageCard from "../components/ImageCard";
 import { FlatList } from 'react-native-gesture-handler';
 
 /**************test data***************/
-import { CATEGORIES, PROMOTIONS } from "../data/testData";
+import { CATEGORIES, PROMOTIONS, PRODUCTS } from "../data/testData";
+import Card from '../components/Card';
 /**************************************/
 
 const HomeScreen = ({ route, navigation }) => {
@@ -36,6 +37,22 @@ const HomeScreen = ({ route, navigation }) => {
                         {itemData.item.title}
                     </P>
                 </View>
+            </View>
+        );
+    };
+    const renderProduct = itemData => {
+        //todo: style this component for differnt screen sizes 
+        return (
+            <View style={styles.flatListHorizontalElementConstainer}>
+                <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0,  borderBottomRightRadius: 0}}/>
+                <Card style={{...styles.trendingProductText, width: 180}}>
+                    <H3>
+                        {itemData.item.name}
+                    </H3>
+                    <P>
+                        {itemData.item.description.substring(0,43) + "..."}
+                    </P>
+                </Card>
             </View>
         );
     };
@@ -77,14 +94,12 @@ const HomeScreen = ({ route, navigation }) => {
 
     //Homepage JSX
     return (
-        <ScrollView style={styles.screen} keyboardShouldPersistTaps="never">
+        <ScrollView style={styles.screen}>
 
             {/* SearchBar */}
 
             <View style={styles.screenPadding}>
-                <View style={styles.center}>
-                    <SearchBar onSubmitSearch={onSubmitSearch} />
-                </View>
+                    <SearchBar style={styles.searchBar} onPress={() => navigation.navigate("Search")} />
             </View>
 
             {/* Categories */}
@@ -102,14 +117,23 @@ const HomeScreen = ({ route, navigation }) => {
                 data={PROMOTIONS}
                 renderItem={renderPromotion}
             />
+
+            {/* Trending Products */}
+
+            <SectionHeader>Trending Products</SectionHeader>
+            <HList
+                data={PRODUCTS}
+                renderItem={renderProduct}
+            />
+            <View style={{height: 30}}></View>
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     searchBar: {
-        width: "100%",
-        height: 50
+        marginVertical: 2,
+        width: "100%"
     },
     screen: {
         paddingVertical: 15,
@@ -130,6 +154,13 @@ const styles = StyleSheet.create({
     flatListHorizontalElementConstainer: {
         paddingHorizontal: 10,
         alignItems: "center"
+    },
+    trendingProductText: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        alignContent: "center",
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0
     }
 });
 
