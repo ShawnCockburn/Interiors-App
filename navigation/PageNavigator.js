@@ -10,6 +10,9 @@ import HomeScreen from "../screens/HomeScreen";
 import ProductListScreen from '../screens/ProductListScreen';
 import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import CartScreen from "../screens/CartScreen";
+import ProductScreen from "../screens/ProductScreen";
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -19,11 +22,12 @@ export default () => {
 
     const theme = Theme();
 
-    const StandardStack = () => {
+    const StandardStack = (props) => {
         return (
-            <Stack.Navigator initialRouteName="HomeScreen">
+            <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Login" component={ProductListScreen} />
+                <Stack.Screen name="ProductList" component={ProductListScreen}/>
+                <Stack.Screen name="Product" component={ProductScreen}/>
             </Stack.Navigator>
         );
     };
@@ -36,6 +40,16 @@ export default () => {
         );
     };
 
+
+    const CartStack = () => {
+        return (
+            <Stack.Navigator initialRouteName="Cart">
+                <Stack.Screen name="Cart" component={CartScreen} />
+            </Stack.Navigator>
+        );
+    };
+
+
     const SettingsStack = () => {
         return (
             <Stack.Navigator initialRouteName="HomeScreen">
@@ -45,6 +59,7 @@ export default () => {
     };
 
     const BottomTabs = (
+
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
@@ -56,6 +71,8 @@ export default () => {
                         icon = <Ionicons name="md-search" size={size} color={color} />;
                     } else if (route.name === 'Settings') {
                         icon = <SimpleLineIcons name="settings" size={size} color={color} />;
+                    } else if (route.name === 'Cart') {
+                        icon = <AntDesign name="shoppingcart" size={size} color={color} />;
                     }
 
                     return icon;
@@ -63,11 +80,13 @@ export default () => {
             })}
             tabBarOptions={{
                 activeTintColor: theme.colors.text,
-                inactiveTintColor: 'gray'
+                inactiveTintColor: 'gray',
+                showLabel: false
             }}
         >
             <Tab.Screen name="Home" component={StandardStack} />
             <Tab.Screen name="Search" component={SearchStack} />
+            <Tab.Screen name="Cart" component={CartStack} />
             <Tab.Screen name="Settings" component={SettingsStack} />
         </Tab.Navigator>
     );

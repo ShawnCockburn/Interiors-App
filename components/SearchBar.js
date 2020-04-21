@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
+import { StyleSheet, View, TextInput, Keyboard, Platform } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 import P from "../components/P";
@@ -36,13 +36,13 @@ const SearchBar = props => {
 
     //if keyboard closes and there is no text value then the placeholder is set
     useEffect(() => {
-        Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+        Keyboard.addListener(Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide", _keyboardHide);
         return () => {
-            Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+            Keyboard.removeListener(Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide", _keyboardHide);
         };
     }, [searchTextValue]);
 
-    const _keyboardDidHide = () => {
+    const _keyboardHide = () => {
         if (searchTextValue.trim() === "") {
             searchCancel();
         }

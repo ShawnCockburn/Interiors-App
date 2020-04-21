@@ -17,7 +17,8 @@ export const customDarkTheme = {
         card: "#272727",
         text: "white",
         border: "black",
-        disabled: "rgba(255, 255, 255, 0.38)"
+        disabled: "rgba(255, 255, 255, 0.38)",
+        tint: "#c9a86b"
     },
     dark: true,
 };
@@ -28,7 +29,8 @@ export const customLightTheme = {
         card: "rgb(255, 255, 255)",
         primary: "rgb(0, 122, 255)",
         text: "rgb(28, 28, 30)",
-        disabled: "#a1a1a1"
+        disabled: "#a1a1a1",
+        tint: "#c9a86b"
     },
     dark: false,
 

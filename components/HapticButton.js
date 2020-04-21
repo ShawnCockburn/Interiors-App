@@ -8,7 +8,7 @@ const HapticButton = props => {
     const theme = Theme();
     return (
         <TouchableOpacity onPress={() => {buttonPress(); props.onPress();}}>
-            <View style={{shadowColor: theme.colors.text,...styles.card, ...props.style }}>
+            <View style={{shadowColor: theme.colors.border, ...styles.card, ...props.style }}>
                 {props.children}
             </View>
         </TouchableOpacity>
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
             height: 1,
         },
         shadowOpacity: 0.5,
-        shadowRadius: 15,
-        elevation: 10
+        shadowRadius: 7,
+        elevation: 4
     }
 });
 

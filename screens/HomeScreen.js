@@ -1,29 +1,34 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
+import { useSelector } from "react-redux";
+import { TouchableWithoutFeedback, FlatList } from 'react-native-gesture-handler';
 
 import P from "../components/P";
 import H3 from "../components/H3";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/ImageCard";
-import { FlatList } from 'react-native-gesture-handler';
 
 /**************test data***************/
-import { CATEGORIES, PROMOTIONS, PRODUCTS } from "../data/testData";
+import { CATEGORIES, PROMOTIONS } from "../data/testData";
 import Card from '../components/Card';
 /**************************************/
 
 const HomeScreen = ({ route, navigation }) => {
+
+    const ranges = useSelector(state => state.ranges.ranges);
+
+
     //horizontal flatlists
     const renderCategory = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
             <View style={styles.flatListHorizontalElementConstainer}>
-                <ImageCard width={120} height={120} source={itemData.item.imageURL} />
-                <View>
+                <ImageCard width={120} height={100} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+                <Card style={{ ...styles.trendingProductText, width: 120 }}>
                     <P>
                         {itemData.item.title}
                     </P>
-                </View>
+                </Card>
             </View>
         );
     };
@@ -32,28 +37,25 @@ const HomeScreen = ({ route, navigation }) => {
         return (
             <View style={styles.flatListHorizontalElementConstainer}>
                 <ImageCard width={180} height={120} source={itemData.item.imageURL} />
-                <View>
-                    <P>
-                        {itemData.item.title}
-                    </P>
-                </View>
             </View>
         );
     };
-    const renderProduct = itemData => {
+    const renderRange = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", {productIds: ["1", "2"]})}>
             <View style={styles.flatListHorizontalElementConstainer}>
-                <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0,  borderBottomRightRadius: 0}}/>
-                <Card style={{...styles.trendingProductText, width: 180}}>
+                <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+                <Card style={{ ...styles.trendingProductText, width: 180 }}>
                     <H3>
                         {itemData.item.name}
                     </H3>
                     <P>
-                        {itemData.item.description.substring(0,43) + "..."}
+                        {itemData.item.description.substring(0, 43) + "..."}
                     </P>
                 </Card>
             </View>
+            </TouchableWithoutFeedback>
         );
     };
     //this adds 5px padding on first and last component of horizontal Flatlist
@@ -62,7 +64,7 @@ const HomeScreen = ({ route, navigation }) => {
     //horizontal flatlist 
     const HList = props => {
         return (
-            <View>
+            // <View >
                 <FlatList
                     {...props}
                     style={styles.flatListHorizontal}
@@ -71,7 +73,7 @@ const HomeScreen = ({ route, navigation }) => {
                     ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
                     ListFooterComponent={flatListHorizontalHeaderFooterComponant}
                 />
-            </View>
+            // </View>
         );
     };
 
@@ -79,27 +81,21 @@ const HomeScreen = ({ route, navigation }) => {
     const SectionHeader = props => {
         return (
             <View style={styles.screenPadding}>
-                <View style={styles.sectionText}>
-                    <H3>{props.children}</H3>
+                <View style={styles.sectionTextContainer}>
+                    <P style={styles.sectionText}>{props.children}</P>
                 </View>
             </View>
         );
     }
 
-    //todo: implement search
-    //if search is submitted
-    const onSubmitSearch = query => {
-        console.log(query);
-    }
-
     //Homepage JSX
     return (
-        <ScrollView style={styles.screen}>
+        <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
 
             {/* SearchBar */}
 
             <View style={styles.screenPadding}>
-                    <SearchBar style={styles.searchBar} onPress={() => navigation.navigate("Search")} />
+                <SearchBar style={styles.searchBar} onPress={() => navigation.navigate("Search")} />
             </View>
 
             {/* Categories */}
@@ -120,12 +116,12 @@ const HomeScreen = ({ route, navigation }) => {
 
             {/* Trending Products */}
 
-            <SectionHeader>Trending Products</SectionHeader>
+            <SectionHeader>Trending Ranges</SectionHeader>
             <HList
-                data={PRODUCTS}
-                renderItem={renderProduct}
+                data={ranges}
+                renderItem={renderRange}
             />
-            <View style={{height: 30}}></View>
+            <View style={{ height: 30 }}></View>
         </ScrollView>
     );
 };
@@ -145,14 +141,18 @@ const styles = StyleSheet.create({
     screenPadding: {
         paddingHorizontal: 15
     },
+    sectionTextContainer: {
+        paddingVertical: 15
+    },
     sectionText: {
-        paddingVertical: 25
+        fontSize: 17
     },
     flatListHorizontal: {
         width: "100%"
     },
     flatListHorizontalElementConstainer: {
-        paddingHorizontal: 10,
+        // paddingHorizontal: 10,
+        padding: 10,
         alignItems: "center"
     },
     trendingProductText: {

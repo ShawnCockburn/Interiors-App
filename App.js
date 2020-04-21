@@ -7,11 +7,15 @@ import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux"
 
 import settingsReducer from "./store/reducers/settings";
+import productsReducer from "./store/reducers/products";
+import rangesReducer from "./store/reducers/ranges";
 
 enableScreens();
 
 const rootReducer = combineReducers({
-  settings: settingsReducer
+  settings: settingsReducer,
+  products: productsReducer,
+  ranges: rangesReducer
 });
 const store = createStore(rootReducer);
 
