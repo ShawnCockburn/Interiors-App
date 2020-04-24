@@ -12,7 +12,7 @@ const ImageCard = props => {
 
 const styles = StyleSheet.create({
     innerCard: {
-        overflow:  "hidden" 
+        overflow:  "hidden"
     }
 });
 

@@ -13,10 +13,10 @@ import { DARKMODE_OPTIONS } from "../data/settings";
 export const customDarkTheme = {
     colors: {
         primary: "rgb(10, 132, 255)",
-        background: "#121212",
+        background: "#141414",
         card: "#272727",
         text: "white",
-        border: "black",
+        border: "#121212",
         disabled: "rgba(255, 255, 255, 0.38)",
         tint: "#c9a86b"
     },
@@ -24,8 +24,8 @@ export const customDarkTheme = {
 };
 export const customLightTheme = {
     colors: {
-        background: "rgb(242, 242, 242)",
-        border: "rgb(224, 224, 224)",
+        background: "#fcfcfc",
+        border: "#c7c7c7",
         card: "rgb(255, 255, 255)",
         primary: "rgb(0, 122, 255)",
         text: "rgb(28, 28, 30)",

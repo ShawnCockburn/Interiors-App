@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Image, FlatList, Dimensions } from 'react-native';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { addToCart } from '../store/actions/cart';
 
 import P from "../components/P";
 import H2 from "../components/H2";
@@ -13,12 +15,16 @@ import { Theme } from '../constants/Theme';
 
 const ProductScreen = ({ route, navigation }) => {
 
+    const dispatch = useDispatch();
+
     const productId = route.params.productId;
     const product = useSelector(state =>
         state.products.availableProducts.find(prod => prod.id === productId));
 
     const theme = Theme();
     const imageWidth = Dimensions.get('window').width;
+
+    const detailIconSize = 30;
 
 
     //horizontal flatlists
@@ -35,19 +41,22 @@ const ProductScreen = ({ route, navigation }) => {
 
                 {/* images */}
                 <View style={styles.flatListElementConstainer}>
-                    <FlatList
-                        data={product.imageURLs.medium}
-                        keyExtractor={item => item}
-                        renderItem={renderProductImage}
-                        horizontal={true}
-                        showsHorizontalScrollIndicator={false}
-                        snapToAlignment={"start"}
-                        snapToInterval={imageWidth + 10}
-                        decelerationRate={"fast"}
-                        pagingEnabled
-                    />
-                    <Card style={{ ...styles.imageFooter, ...styles.card }}>
-                        <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.buyButton }} onPress={() => { }}><P>ADD TO CART</P></HapticButton>
+
+                    <Card style={styles.card}>
+                        <FlatList
+                            data={Dimensions.get("window").width > 600 ? product.imageURLs.large : product.imageURLs.medium}
+                            keyExtractor={item => item}
+                            renderItem={renderProductImage}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                            snapToAlignment={"start"}
+                            snapToInterval={imageWidth + 10}
+                            decelerationRate={"fast"}
+                            pagingEnabled
+                        />
+                        <View style={styles.imageFooter}>
+                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.buyButton }} onPress={() => { dispatch(addToCart(product.id, 1)) }}><P>ADD TO CART</P></HapticButton>
+                        </View>
                     </Card>
                 </View>
 
@@ -58,7 +67,43 @@ const ProductScreen = ({ route, navigation }) => {
                     <View style={styles.cardSection}>
                         <H3>£{product.price}</H3>
                     </View>
+
                     <P>{product.description}</P>
+
+
+                </Card>
+                <Card style={{ ...styles.screenPadding, ...styles.card, ...styles.marginVertical }}>
+                    <View style={styles.cardSection}>
+                        <H3>Details</H3>
+                    </View>
+                    <View style={styles.detailsRow}>
+                        <View style={styles.detailsContainer}>
+                            <MaterialCommunityIcons name="ruler" size={detailIconSize} color={theme.colors.text} />
+                            <View>
+                                <P>Height: {product.height}</P>
+                                <P>Width: {product.width}</P>
+                                <P>Depth: {product.depth}</P>
+                            </View>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <MaterialCommunityIcons name="weight" size={detailIconSize} color={theme.colors.text} />
+                            <View>
+                                <P>Weight: {product.weight}</P>
+                            </View>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <MaterialCommunityIcons name="format-paint" size={detailIconSize} color={theme.colors.text} />
+                            <View>
+                                <P>Color: {product.color}</P>
+                            </View>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <MaterialCommunityIcons name="hammer" size={detailIconSize} color={theme.colors.text} />
+                            <View>
+                            <P>Material: {product.material}</P>
+                            </View>
+                        </View>
+                    </View>
                 </Card>
             </ScrollView>
         </View>
@@ -83,6 +128,7 @@ const styles = StyleSheet.create({
     flatListElementConstainer: {
         flex: 1,
         width: "100%",
+        marginBottom: 5
     },
     imageFooter: {
         borderTopLeftRadius: 0,
@@ -93,7 +139,7 @@ const styles = StyleSheet.create({
         borderRadius: 12
     },
     marginVertical: {
-        marginVertical: 15
+        marginVertical: 10
     },
     buyButton: {
         justifyContent: "center",
@@ -106,6 +152,15 @@ const styles = StyleSheet.create({
     },
     cardSection: {
         paddingBottom: 20
+    },
+    detailsRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        maxWidth: "100%"
+    },
+    detailsContainer: {
+        alignItems: "center",
+        maxWidth: Math.floor(Dimensions.get("window").width / 4)
     }
 });
 

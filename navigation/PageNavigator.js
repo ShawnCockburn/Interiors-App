@@ -26,8 +26,9 @@ export default () => {
         return (
             <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="ProductList" component={ProductListScreen}/>
-                <Stack.Screen name="Product" component={ProductScreen}/>
+                <Stack.Screen name="ProductList" component={ProductListScreen} options={({ route }) => ({ title: route.params.title })} />
+                <Stack.Screen name="Product" component={ProductScreen} options={({ route }) => ({ title: route.params.title })}
+                />
             </Stack.Navigator>
         );
     };

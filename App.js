@@ -9,13 +9,15 @@ import { Provider } from "react-redux"
 import settingsReducer from "./store/reducers/settings";
 import productsReducer from "./store/reducers/products";
 import rangesReducer from "./store/reducers/ranges";
+import cartReducer from "./store/reducers/cart";
 
 enableScreens();
 
 const rootReducer = combineReducers({
   settings: settingsReducer,
   products: productsReducer,
-  ranges: rangesReducer
+  ranges: rangesReducer,
+  cart: cartReducer
 });
 const store = createStore(rootReducer);
 

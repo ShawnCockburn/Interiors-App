@@ -16,7 +16,7 @@ const HapticButton = props => {
 };
 
 const buttonPress = () => {
-    if (Platform.OS === "ios" && Platform.Version >= 10){
+    if (Platform.OS === "ios" && parseInt(Platform.Version, 10) >= 10){
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     }
 };

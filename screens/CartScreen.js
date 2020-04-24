@@ -1,63 +1,75 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
+import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 
 import P from "../components/P";
-import H3 from "../components/H3";
-import SearchBar from "../components/SearchBar";
-import ImageCard from "../components/ImageCard";
 import { FlatList } from 'react-native-gesture-handler';
+import {  } from '../store/actions/cart';
 
-/**************test data***************/
-import { CATEGORIES, PROMOTIONS } from "../data/testData";
-/**************************************/
 
 const CartScreen = ({ route, navigation }) => {
-    //horizontal flatlists
-    const renderResult = itemData => {
-        //todo: style this component for differnt screen sizes 
-        return (
-            <View style={styles.flatListElementConstainer}>
-                <P>
-                    {itemData.item.title}
-                </P>
-            </View>
-        );
+
+    const getRandomInt = max => {
+        return Math.floor((Math.random() + 1) * Math.floor(max));
+    }
+
+    const allProducts = useSelector(state => state.products.availableProducts);
+    const getProduct = productId => {
+        return allProducts.find(product => product.id === productId);
     };
 
-    //item flatlist 
-    const ItemList = props => {
-        return (
-            <View>
-                <FlatList
-                    {...props}
-                    style={styles.flatList}
-                    showsHorizontalScrollIndicator={false}
-                    ListHeaderComponent={flatListVerticalHeaderFooterComponant}
-                    ListFooterComponent={flatListVerticalHeaderFooterComponant}
-                />
+    const cartItems = useSelector(state => state.cart.items);
+
+    const dispatch = useDispatch();
+
+    const CartList = props => {
+        //placeholder
+
+        const placeholder = (
+            <View style={styles.center}>
+                <P>Shopping cart is empty.</P>
             </View>
         );
-    };
 
-    //this adds 5px padding on first and last component of Flatlist
-    const flatListVerticalHeaderFooterComponant = <View style={{ height: 5 }}></View>;
+        //list of products
+
+        const renderResult = itemData => {
+            //todo: style this component for differnt screen sizes 
+            const product = getProduct(itemData.item.productId);
+            return (
+                <View style={styles.flatListElementConstainer}>
+                    <P>
+                        {product.name}
+                    </P>
+                    <P>{itemData.item.quantity}</P>
+                </View>
+            );
+        };
+
+        const productList = (
+            <FlatList data={cartItems} renderItem={renderResult} keyExtractor={item => item.productId} />
+        );
+
+        //this adds 5px padding on first and last component of Flatlist
+        const flatListVerticalHeaderFooterComponant = <View style={{ height: 5 }}></View>;
+
+
+        //retun based on if cart empty
+        return _.isEmpty(props.cartItemData) ? placeholder : productList;
+    }
 
 
     //Homepage JSX
     return (
         <View style={styles.root}>
-        <View style={styles.center}>
-                <P>Shopping cart is empty.</P>
-            </View>
-        <ScrollView style={styles.screen} keyboardShouldPersistTaps="never">
-        </ScrollView>
-        
+            <CartList cartItemData={cartItems} />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    root:{
+    root: {
         flex: 1,
         width: "100%",
         height: "100%"

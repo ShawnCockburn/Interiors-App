@@ -3,29 +3,42 @@ import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 
 import { Theme } from "../constants/Theme";
 
+const Touch = props => {
+    return props.onPress === undefined ? (
+        <View>{props.children}</View>
+    ) :
+    (
+    <TouchableWithoutFeedback onPress={props.onPress}>
+        {props.children}
+    </TouchableWithoutFeedback>
+    );
+};
+
 const Card = props => {
     const theme = Theme();
     return (
-        <TouchableWithoutFeedback onPress={props.onPress}>
-            <View style={{ shadowColor: theme.colors.border, backgroundColor: theme.colors.card, ...styles.card, ...props.style }}>
-
-                {props.children}
-
+        <Touch onPress={props.onPress}>
+            <View style={{shadowColor: theme.colors.border, ...styles.parent}}>
+                <View style={{ backgroundColor: theme.colors.card, ...styles.card, ...props.style }}>
+                    {props.children}
+                </View>
             </View>
-        </TouchableWithoutFeedback>
+        </Touch>
     );
 };
 
 const styles = StyleSheet.create({
     card: {
         borderRadius: 5,
+        elevation: 3.5
+    },
+    parent: {
         shadowOffset: {
             width: 0,
-            height: 1,
+            height: 4,
         },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-        elevation: 3
+        shadowOpacity: 1,
+        shadowRadius: 6
     }
 });
 

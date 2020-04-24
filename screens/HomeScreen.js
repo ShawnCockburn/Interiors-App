@@ -43,8 +43,8 @@ const HomeScreen = ({ route, navigation }) => {
     const renderRange = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", {productIds: ["1", "2"]})}>
-            <View style={styles.flatListHorizontalElementConstainer}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", {productIds: itemData.item.productIds, title: itemData.item.name})}>
+            <View style={{...styles.flatListHorizontalElementConstainer, ...styles.bottomHlist}}>
                 <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
                 <Card style={{ ...styles.trendingProductText, width: 180 }}>
                     <H3>
@@ -67,7 +67,7 @@ const HomeScreen = ({ route, navigation }) => {
             // <View >
                 <FlatList
                     {...props}
-                    style={styles.flatListHorizontal}
+                    style={{...styles.flatListHorizontal, ...props.style}}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
@@ -116,23 +116,22 @@ const HomeScreen = ({ route, navigation }) => {
 
             {/* Trending Products */}
 
-            <SectionHeader>Trending Ranges</SectionHeader>
+            <SectionHeader>Ranges</SectionHeader>
             <HList
                 data={ranges}
                 renderItem={renderRange}
             />
-            <View style={{ height: 30 }}></View>
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     searchBar: {
-        marginVertical: 2,
+        marginVertical: 15,
         width: "100%"
     },
     screen: {
-        paddingVertical: 15,
+        // paddingVertical: 15,
         flex: 1
     },
     center: {
@@ -142,13 +141,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15
     },
     sectionTextContainer: {
-        paddingVertical: 15
     },
     sectionText: {
         fontSize: 17
     },
     flatListHorizontal: {
-        width: "100%"
+        width: "100%",
+        paddingVertical: 9
     },
     flatListHorizontalElementConstainer: {
         // paddingHorizontal: 10,
@@ -161,6 +160,9 @@ const styles = StyleSheet.create({
         alignContent: "center",
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0
+    },
+    bottomHlist: {
+        paddingBottom: 15
     }
 });
 

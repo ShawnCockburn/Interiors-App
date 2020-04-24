@@ -66,11 +66,10 @@ const SearchScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     searchBar: {
-        marginVertical: 2,
+        marginVertical: 15,
         width: "100%"
     },
     screen: {
-        paddingVertical: 15,
         flex: 1
     },
     center: {
