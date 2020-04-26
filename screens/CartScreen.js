@@ -5,14 +5,12 @@ import _ from "lodash";
 
 import P from "../components/P";
 import { FlatList } from 'react-native-gesture-handler';
-import {  } from '../store/actions/cart';
+import { updateCartQuantity } from '../store/actions/cart';
+import ImageCard from '../components/ImageCard';
+import Quantity from "../components/Quantity";
 
 
 const CartScreen = ({ route, navigation }) => {
-
-    const getRandomInt = max => {
-        return Math.floor((Math.random() + 1) * Math.floor(max));
-    }
 
     const allProducts = useSelector(state => state.products.availableProducts);
     const getProduct = productId => {
@@ -23,11 +21,15 @@ const CartScreen = ({ route, navigation }) => {
 
     const dispatch = useDispatch();
 
+    const updateCartItemQuantity = (productId, quantity) => {
+        dispatch(updateCartQuantity(productId, quantity));
+    };
+
     const CartList = props => {
         //placeholder
 
         const placeholder = (
-            <View style={styles.center}>
+            <View style={styles.placeholderText}>
                 <P>Shopping cart is empty.</P>
             </View>
         );
@@ -38,11 +40,28 @@ const CartScreen = ({ route, navigation }) => {
             //todo: style this component for differnt screen sizes 
             const product = getProduct(itemData.item.productId);
             return (
-                <View style={styles.flatListElementConstainer}>
-                    <P>
-                        {product.name}
-                    </P>
-                    <P>{itemData.item.quantity}</P>
+                <View style={styles.cartItemElementConstainer}>
+                    <ImageCard source={product.imageURLs.small[0]} width={80} height={80} />
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.innerCartItemText} >
+                            <P>
+                                {product.name}
+                            </P>
+                        </View>
+                        <View style={styles.innerCartItemText} >
+                            <P>
+                                £{itemData.item.quantity * product.price}
+                            </P>
+                        </View>
+                    </View>
+
+                    <Quantity
+                        value={itemData.item.quantity}
+                        increase={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity + 1) }}
+                        decrease={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity - 1) }}
+                        disabled={itemData.item.quantity > 1 ? false : true}
+                    />
+
                 </View>
             );
         };
@@ -74,19 +93,10 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%"
     },
-    searchBar: {
-        marginVertical: 2,
-        width: "100%"
-    },
     screen: {
         paddingVertical: 15,
         flex: 1,
         height: "100%"
-    },
-    center: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
     },
     screenPadding: {
         paddingHorizontal: 15
@@ -97,9 +107,19 @@ const styles = StyleSheet.create({
     flatList: {
         width: "100%"
     },
-    flatListElementConstainer: {
-        paddingVertical: 10,
-        alignItems: "center"
+    cartItemElementConstainer: {
+        flexDirection: "row",
+        // paddingVertical: 10,
+        alignItems: "center",
+        padding: 15
+    },
+    placeholderText: {
+        flex: 1,
+        alignSelf: "center",
+        justifyContent: "center"
+    },
+    innerCartItemText: {
+        padding: 10
     }
 });
 

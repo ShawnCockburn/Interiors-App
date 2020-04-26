@@ -34,7 +34,7 @@ export default (state = initialState, action) => {
 
             const updatedCart = cart.map(item => {
                 if (item.productId === action.payload.productId) {
-                    item.quantity += action.payload.quantity
+                    action.payload.quantity < 1 ? item.quantity : item.quantity = action.payload.quantity
                 }
                 return item;
             });

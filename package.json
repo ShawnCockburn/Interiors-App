@@ -23,6 +23,7 @@
     "react-native-reanimated": "~1.7.0",
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "^2.2.0",
+    "react-native-swipe-list-view": "^3.0.0",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.3.7",
     "react-navigation-collapsible": "^5.5.0",
@@ -31,7 +32,8 @@
     "react-navigation-stack": "^2.3.11",
     "react-navigation-tabs": "^2.8.11",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

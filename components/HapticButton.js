@@ -7,7 +7,7 @@ import { Theme } from "../constants/Theme";
 const HapticButton = props => {
     const theme = Theme();
     return (
-        <TouchableOpacity onPress={() => {buttonPress(); props.onPress();}}>
+        <TouchableOpacity onPress={() => {buttonPress(); props.onPress();}} disabled={props.disabled === undefined ? false : props.disabled}>
             <View style={{shadowColor: theme.colors.border, ...styles.card, ...props.style }}>
                 {props.children}
             </View>
