@@ -87,15 +87,12 @@ const styles = StyleSheet.create({
     },
     optionButtonsContainer: {
         flexDirection: "row",
-        height: 50,
         alignItems: "center",
         justifyContent: "space-between"
     },
     optionButton: {
-        flex: 1,
         flexDirection: "column",
         width: 60,
-        height: 50,
         alignItems: "center",
         justifyContent: "center"
     },

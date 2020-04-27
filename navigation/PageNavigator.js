@@ -46,6 +46,7 @@ export default () => {
         return (
             <Stack.Navigator initialRouteName="Cart">
                 <Stack.Screen name="Cart" component={CartScreen} />
+                <Stack.Screen name="Product" component={ProductScreen} options={({ route }) => ({ title: route.params.title })}/>
             </Stack.Navigator>
         );
     };

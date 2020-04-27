@@ -18,7 +18,8 @@ export const customDarkTheme = {
         text: "white",
         border: "#121212",
         disabled: "rgba(255, 255, 255, 0.38)",
-        tint: "#c9a86b"
+        tint: "#c9a86b",
+        remove: "#ef5350"
     },
     dark: true,
 };
@@ -30,7 +31,8 @@ export const customLightTheme = {
         primary: "rgb(0, 122, 255)",
         text: "rgb(28, 28, 30)",
         disabled: "#a1a1a1",
-        tint: "#c9a86b"
+        tint: "#D3B988",
+        remove: "#ffab91"
     },
     dark: false,
 

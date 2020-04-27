@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, ScrollView, Image, FlatList, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { addToCart } from '../store/actions/cart';
+import { addToCart, removeFromCart } from '../store/actions/cart';
 
 import P from "../components/P";
 import H2 from "../components/H2";
@@ -10,6 +10,7 @@ import H3 from "../components/H3";
 import Card from '../components/Card';
 import HapticButton from "../components/HapticButton";
 import { Theme } from '../constants/Theme';
+import Quantity from '../components/Quantity';
 
 //todo: finish styling this page
 
@@ -20,6 +21,8 @@ const ProductScreen = ({ route, navigation }) => {
     const productId = route.params.productId;
     const product = useSelector(state =>
         state.products.availableProducts.find(prod => prod.id === productId));
+    const cartItem = useSelector(state =>
+        state.cart.items.find(prod => prod.productId === productId));
 
     const theme = Theme();
     const imageWidth = Dimensions.get('window').width;
@@ -42,7 +45,7 @@ const ProductScreen = ({ route, navigation }) => {
                 {/* images */}
                 <View style={styles.flatListElementConstainer}>
 
-                    <Card style={styles.card}>
+                    <Card style={{ ...styles.card, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                         <FlatList
                             data={Dimensions.get("window").width > 600 ? product.imageURLs.large : product.imageURLs.medium}
                             keyExtractor={item => item}
@@ -55,7 +58,26 @@ const ProductScreen = ({ route, navigation }) => {
                             pagingEnabled
                         />
                         <View style={styles.imageFooter}>
-                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.buyButton }} onPress={() => { dispatch(addToCart(product.id, 1)) }}><P>ADD TO CART</P></HapticButton>
+                            {
+                                cartItem === undefined ?
+                                    <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.cartButton }} onPress={() => { dispatch(addToCart(product.id, 1)) }}>
+                                        <P>ADD TO CART</P>
+                                    </HapticButton>
+                                    :
+                                    <View>
+                                        <HapticButton style={{ backgroundColor: theme.colors.remove, ...styles.cartButton }} onPress={() => { dispatch(removeFromCart(product.id)) }}>
+                                            <P>REMOVE FROM CART</P>
+                                        </HapticButton>
+                                        <View style={styles.quantityContainer}>
+                                            
+                                                <P style={styles.quantityText}>Quantity: {cartItem.quantity}</P>
+                                            
+                                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.changeButton }} onPress={() => { dispatch(removeFromCart(product.id)) }}>
+                                                <P>CHANGE</P>
+                                            </HapticButton>
+                                        </View>
+                                    </View>
+                            }
                         </View>
                     </Card>
                 </View>
@@ -100,7 +122,7 @@ const ProductScreen = ({ route, navigation }) => {
                         <View style={styles.detailsContainer}>
                             <MaterialCommunityIcons name="hammer" size={detailIconSize} color={theme.colors.text} />
                             <View>
-                            <P>Material: {product.material}</P>
+                                <P>Material: {product.material}</P>
                             </View>
                         </View>
                     </View>
@@ -141,7 +163,7 @@ const styles = StyleSheet.create({
     marginVertical: {
         marginVertical: 10
     },
-    buyButton: {
+    cartButton: {
         justifyContent: "center",
         alignItems: "center",
         marginVertical: 10,
@@ -161,6 +183,24 @@ const styles = StyleSheet.create({
     detailsContainer: {
         alignItems: "center",
         maxWidth: Math.floor(Dimensions.get("window").width / 4)
+    },
+    changeButton: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 10,
+        marginHorizontal: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        width: 100
+    },
+    quantityContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    quantityText: {
+        fontSize: 15
     }
 });
 

@@ -13,8 +13,8 @@ const Quantity = props => {
     const buttonSize = props.buttonSize === undefined ? 30 : props.buttonSize;
     const buttonStyle = {...styles.button, ...{width: buttonSize, height: buttonSize, backgroundColor: theme.colors.tint}};
     return (
-        <View style={styles.container}>
-            <HapticButton style={buttonStyle} onPress={props.decrease} disabled={props.disabled}>
+        <View style={{...styles.container, ...props.containerStyle}}>
+            <HapticButton style={buttonStyle} onPress={props.decrease} disabled={props.disabled} >
                 <AntDesign name="minus" size={18} color={theme.colors.text}/>
             </HapticButton>
             <View style={styles.valueTextContainer}>
