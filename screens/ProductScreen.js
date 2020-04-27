@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Image, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, ScrollView, Image, FlatList, Dimensions, TextInput } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addToCart, removeFromCart } from '../store/actions/cart';
@@ -10,7 +10,7 @@ import H3 from "../components/H3";
 import Card from '../components/Card';
 import HapticButton from "../components/HapticButton";
 import { Theme } from '../constants/Theme';
-import Quantity from '../components/Quantity';
+
 
 //todo: finish styling this page
 
@@ -28,6 +28,7 @@ const ProductScreen = ({ route, navigation }) => {
     const imageWidth = Dimensions.get('window').width;
 
     const detailIconSize = 30;
+
 
 
     //horizontal flatlists
@@ -69,10 +70,10 @@ const ProductScreen = ({ route, navigation }) => {
                                             <P>REMOVE FROM CART</P>
                                         </HapticButton>
                                         <View style={styles.quantityContainer}>
-                                            
-                                                <P style={styles.quantityText}>Quantity: {cartItem.quantity}</P>
-                                            
-                                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.changeButton }} onPress={() => { dispatch(removeFromCart(product.id)) }}>
+
+                                            <P style={styles.quantityText}>Quantity: {cartItem.quantity}</P>
+
+                                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.changeButton }} onPress={() => {  }}>
                                                 <P>CHANGE</P>
                                             </HapticButton>
                                         </View>

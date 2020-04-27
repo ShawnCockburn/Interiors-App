@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 import { EvilIcons } from "@expo/vector-icons";
@@ -10,7 +10,8 @@ import { updateCartQuantity, removeFromCart } from '../store/actions/cart';
 import ImageCard from '../components/ImageCard';
 import Quantity from "../components/Quantity";
 import { Theme } from '../constants/Theme';
-import { TouchableOpacity, TouchableWithoutFeedback, FlatList } from 'react-native-gesture-handler';
+
+const halfScreenWidth = Dimensions.get("window").width / 2;
 
 
 const CartScreen = ({ route, navigation }) => {
@@ -75,36 +76,41 @@ const CartScreen = ({ route, navigation }) => {
 
 
 
-                <TouchableWithoutFeedback style={{ ...styles.cartItemElementConstainer, backgroundColor: theme.colors.background }} onPress={() => navigation.navigate("Product", { productId: itemData.item.productId, title: product.code })}>
-                    <ImageCard source={product.imageURLs.small[0]} width={80} height={80} />
-                    <View style={{ flex: 1 }}>
-                        <View style={styles.innerCartItemText} >
-                            <P>
-                                {product.name}
-                            </P>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.productId, title: product.code })}>
+                    <View style={{ ...styles.cartItemElementConstainer, backgroundColor: theme.colors.background }}>
+                        <ImageCard source={product.imageURLs.small[0]} width={80} height={80} />
+                        <View style={{ flex: 1 }}>
+                            <View style={styles.innerCartItemText} >
+                                <P>
+                                    {product.name}
+                                </P>
+                            </View>
+                            <View style={styles.innerCartItemText} >
+                                <P>
+                                    £{itemData.item.quantity * product.price}
+                                </P>
+                            </View>
                         </View>
-                        <View style={styles.innerCartItemText} >
-                            <P>
-                                £{itemData.item.quantity * product.price}
-                            </P>
-                        </View>
+                        <TouchableWithoutFeedback>
+                            <View style={{ padding: 10 }}>
+                                <Quantity
+                                    value={itemData.item.quantity}
+                                    increase={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity + 1) }}
+                                    decrease={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity - 1) }}
+                                    disabled={itemData.item.quantity > 1 ? false : true}
+                                />
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                    <TouchableWithoutFeedback style={{padding: 10}}>
-                        <Quantity
-                            value={itemData.item.quantity}
-                            increase={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity + 1) }}
-                            decrease={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity - 1) }}
-                            disabled={itemData.item.quantity > 1 ? false : true}
-                        />
-                    </TouchableWithoutFeedback>
-
                 </TouchableWithoutFeedback>
             );
         };
 
+        //delete item
+
         const renderHiddenDeleteItem = (data, rowMap) => (
-            <View style={{ ...styles.rowBack, backgroundColor: theme.colors.remove, width: Dimensions.get("window").width / 2 }}>
-                <TouchableOpacity onPress={() => { dispatch(removeFromCart(data.item.productId)) }}>
+            <View style={{ ...styles.rowBack, backgroundColor: theme.colors.remove, width: halfScreenWidth}}>
+                <TouchableOpacity onPress={() => { dispatch(removeFromCart(data.item.productId)) }} style={{padding: 20}}>
                     <EvilIcons name="trash" size={38} color={"white"} />
                 </TouchableOpacity>
             </View>
@@ -114,7 +120,7 @@ const CartScreen = ({ route, navigation }) => {
             <SwipeListView data={cartItems} renderItem={renderResult} keyExtractor={item => item.productId}
                 renderHiddenItem={renderHiddenDeleteItem}
                 leftOpenValue={110}
-                stopLeftSwipe={Dimensions.get("window").width / 2}
+                stopLeftSwipe={halfScreenWidth}
                 disableLeftSwipe={true}
                 onRowOpen={() => { setRowIsOpen(true) }}
                 onRowClose={() => { setRowIsOpen(false) }}
@@ -185,7 +191,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         flexDirection: 'row',
-        paddingLeft: 35
+        paddingLeft: 15
     },
     innerCartItemTextContainer: {
         maxWidth: Dimensions.get("window").width - 200
