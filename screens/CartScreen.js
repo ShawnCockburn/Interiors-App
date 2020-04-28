@@ -97,7 +97,8 @@ const CartScreen = ({ route, navigation }) => {
                                     value={itemData.item.quantity}
                                     increase={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity + 1) }}
                                     decrease={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity - 1) }}
-                                    disabled={itemData.item.quantity > 1 ? false : true}
+                                    decreaseDisabled={itemData.item.quantity > 1 ? false : true}
+                                    increaseDisabled={product.stock <= itemData.item.quantity ? true : false}
                                 />
                             </View>
                         </TouchableWithoutFeedback>

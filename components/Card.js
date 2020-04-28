@@ -8,7 +8,7 @@ const Touch = props => {
         <View>{props.children}</View>
     ) :
     (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableWithoutFeedback onPress={props.onPress} disabled={props.disabled} >
         {props.children}
     </TouchableWithoutFeedback>
     );
@@ -17,7 +17,7 @@ const Touch = props => {
 const Card = props => {
     const theme = Theme();
     return (
-        <Touch onPress={props.onPress}>
+        <Touch onPress={props.onPress} >
             <View style={{shadowColor: theme.colors.border, ...styles.parent}}>
                 <View style={{ backgroundColor: theme.colors.card, ...styles.card, ...props.style }}>
                     {props.children}

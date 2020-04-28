@@ -11,17 +11,23 @@ import H3 from "../components/H3";
 const Quantity = props => {
     const theme = Theme();
     const buttonSize = props.buttonSize === undefined ? 30 : props.buttonSize;
-    const buttonStyle = {...styles.button, ...{width: buttonSize, height: buttonSize, backgroundColor: theme.colors.tint}};
+    const buttonStyle = { ...styles.button, ...{ width: buttonSize, height: buttonSize } };
     return (
-        <View style={{...styles.container, ...props.containerStyle}}>
-            <HapticButton style={buttonStyle} onPress={props.decrease} disabled={props.disabled} >
-                <AntDesign name="minus" size={18} color={theme.colors.text}/>
+        <View style={{ ...styles.container, ...props.containerStyle }}>
+            <HapticButton style={{ ...buttonStyle, backgroundColor: props.decreaseDisabled === true ? theme.colors.disabled : theme.colors.tint }}
+                onPress={props.decrease}
+                disabled={props.decreaseDisabled}
+            >
+                <AntDesign name="minus" size={18} color={theme.colors.text} />
             </HapticButton>
             <View style={styles.valueTextContainer}>
                 <H3 style={styles.valueText} >{props.value}</H3>
             </View>
-            <HapticButton style={buttonStyle} onPress={props.increase} >
-                <AntDesign name="plus" size={18} color={theme.colors.text}/>
+            <HapticButton style={{ ...buttonStyle, backgroundColor: props.increaseDisabled === true ? theme.colors.disabled : theme.colors.tint }}
+                onPress={props.increase}
+                disabled={props.increaseDisabled}
+            >
+                <AntDesign name="plus" size={18} color={theme.colors.text} />
             </HapticButton>
         </View>
     );

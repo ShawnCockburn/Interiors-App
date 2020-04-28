@@ -35,7 +35,7 @@ export const PRODUCTS = [
       medium: ["https://www.hill-interiors.com/images/large/18621.jpg", "https://www.hill-interiors.com/images/large/18621-a.jpg", "https://www.hill-interiors.com/images/large/18621-b.jpg"],
       small: ["https://www.hill-interiors.com/images/small/18621sml.jpg", "https://www.hill-interiors.com/images/small/18621-asml.jpg", "https://www.hill-interiors.com/images/small/18621-bsml.jpg"]
     },
-    26,
+    0,
     "73cm",
     "144cm",
     "45cm",

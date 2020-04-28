@@ -1,8 +1,16 @@
-import React from 'react';
-import { StyleSheet, View, ScrollView, Image, FlatList, Dimensions, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import {
+    StyleSheet,
+    View,
+    ScrollView,
+    Image,
+    FlatList,
+    Dimensions,
+    TouchableOpacity
+} from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { addToCart, removeFromCart } from '../store/actions/cart';
+import { addToCart, removeFromCart, UPDATE_CART_QUANTITY, updateCartQuantity } from '../store/actions/cart';
 
 import P from "../components/P";
 import H2 from "../components/H2";
@@ -10,11 +18,14 @@ import H3 from "../components/H3";
 import Card from '../components/Card';
 import HapticButton from "../components/HapticButton";
 import { Theme } from '../constants/Theme';
+import CenteredModal from "../components/CenteredModal";
+import HorizontalLine from "../components/HorizontalLine";
 
 
 //todo: finish styling this page
 
 const ProductScreen = ({ route, navigation }) => {
+    const [modalVisible, setModalVisible] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -29,6 +40,8 @@ const ProductScreen = ({ route, navigation }) => {
 
     const detailIconSize = 30;
 
+    //flatlist modal numbers
+    const quantityNumberList = [...Array(product.stock).keys()].map(x => { return { id: Math.random() + "-" + x, value: x + 1 } });
 
 
     //horizontal flatlists
@@ -41,6 +54,24 @@ const ProductScreen = ({ route, navigation }) => {
     //Homepage JSX
     return (
         <View style={styles.screen}>
+            <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
+                <View style={{}}>
+                    <FlatList data={quantityNumberList} listKey={item => item.id} renderItem={
+                        itemData => {
+                            return (
+                                <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item.value === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
+                                    onPress={() => { dispatch(updateCartQuantity(productId, itemData.item.value)); setModalVisible(false) }}>
+                                    <View style={{ alignItems: "center", padding: 10 }}>
+                                        <P>{itemData.item.value}</P>
+                                    </View>
+                                    <HorizontalLine style={{ borderColor: "grey" }} />
+                                </TouchableOpacity>
+                            );
+                        }
+                    }
+                    />
+                </View>
+            </CenteredModal>
             <ScrollView style={styles.screen} keyboardShouldPersistTaps="never">
 
                 {/* images */}
@@ -49,7 +80,7 @@ const ProductScreen = ({ route, navigation }) => {
                     <Card style={{ ...styles.card, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                         <FlatList
                             data={Dimensions.get("window").width > 600 ? product.imageURLs.large : product.imageURLs.medium}
-                            keyExtractor={item => item}
+                            // keyExtractor={item => item}
                             renderItem={renderProductImage}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
@@ -61,9 +92,12 @@ const ProductScreen = ({ route, navigation }) => {
                         <View style={styles.imageFooter}>
                             {
                                 cartItem === undefined ?
+                                product.stock > 0 ?
                                     <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.cartButton }} onPress={() => { dispatch(addToCart(product.id, 1)) }}>
                                         <P>ADD TO CART</P>
                                     </HapticButton>
+                                    :
+                                    <View style={styles.cartButton}><H3>Out Of Stock</H3></View>
                                     :
                                     <View>
                                         <HapticButton style={{ backgroundColor: theme.colors.remove, ...styles.cartButton }} onPress={() => { dispatch(removeFromCart(product.id)) }}>
@@ -73,7 +107,7 @@ const ProductScreen = ({ route, navigation }) => {
 
                                             <P style={styles.quantityText}>Quantity: {cartItem.quantity}</P>
 
-                                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.changeButton }} onPress={() => {  }}>
+                                            <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.changeButton }} onPress={() => { setModalVisible(!modalVisible) }}>
                                                 <P>CHANGE</P>
                                             </HapticButton>
                                         </View>
@@ -202,6 +236,11 @@ const styles = StyleSheet.create({
     },
     quantityText: {
         fontSize: 15
+    },
+    modalView: {
+        padding: 10,
+        width: Dimensions.get("window").width / 1.25,
+        height: Dimensions.get("window").height / 1.5
     }
 });
 

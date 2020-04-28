@@ -1,9 +1,5 @@
 import { useColorScheme } from 'react-native-appearance';
 import { StatusBar } from 'react-native';
-import {
-    DefaultTheme,
-    DarkTheme,
-} from '@react-navigation/native';
 import { useSelector } from "react-redux";
 
 import { DARKMODE_OPTIONS } from "../data/settings";
@@ -32,7 +28,7 @@ export const customLightTheme = {
         text: "rgb(28, 28, 30)",
         disabled: "#a1a1a1",
         tint: "#D3B988",
-        remove: "#ffab91"
+        remove: "#f2816b"
     },
     dark: false,
 
