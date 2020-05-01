@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -41,8 +41,11 @@ const ProductScreen = ({ route, navigation }) => {
     const detailIconSize = 30;
 
     //flatlist modal numbers
-    const quantityNumberList = [...Array(product.stock).keys()].map(x => { return { id: Math.random() + "-" + x, value: x + 1 } });
-
+    const [quantityNumberList, setQuantityNumberList] = useState([]);
+    useEffect(() => {
+        setQuantityNumberList([...Array(product.stock).keys()].map(x => { return { id: "key-" + x, value: x + 1 } }));
+    }, [cartItem]);
+   
 
     //horizontal flatlists
     const renderProductImage = itemData => {
@@ -56,7 +59,7 @@ const ProductScreen = ({ route, navigation }) => {
         <View style={styles.screen}>
             <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
                 <View style={{}}>
-                    <FlatList data={quantityNumberList} listKey={item => item.id} renderItem={
+                    <FlatList data={quantityNumberList} keyExtractor={(item, index) => { item.id.toString()}} renderItem={
                         itemData => {
                             return (
                                 <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item.value === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
@@ -92,12 +95,12 @@ const ProductScreen = ({ route, navigation }) => {
                         <View style={styles.imageFooter}>
                             {
                                 cartItem === undefined ?
-                                product.stock > 0 ?
-                                    <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.cartButton }} onPress={() => { dispatch(addToCart(product.id, 1)) }}>
-                                        <P>ADD TO CART</P>
-                                    </HapticButton>
-                                    :
-                                    <View style={styles.cartButton}><H3>Out Of Stock</H3></View>
+                                    product.stock > 0 ?
+                                        <HapticButton style={{ backgroundColor: theme.colors.tint, ...styles.cartButton }} onPress={() => { dispatch(addToCart(product.id, 1)) }}>
+                                            <P>ADD TO CART</P>
+                                        </HapticButton>
+                                        :
+                                        <View style={styles.cartButton}><H3>Out Of Stock</H3></View>
                                     :
                                     <View>
                                         <HapticButton style={{ backgroundColor: theme.colors.remove, ...styles.cartButton }} onPress={() => { dispatch(removeFromCart(product.id)) }}>
