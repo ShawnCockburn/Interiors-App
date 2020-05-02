@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Keyboard, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, Keyboard, Platform,TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 import P from "../components/P";
 import Card from "../components/Card";
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+// import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 
