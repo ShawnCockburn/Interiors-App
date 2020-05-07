@@ -1,22 +1,28 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { useSelector } from "react-redux";
 import { TouchableWithoutFeedback, FlatList } from 'react-native-gesture-handler';
+import * as productActions from "../store/actions/products";
+import {useDispatch} from "react-redux";
 
 import P from "../components/P";
 import H3 from "../components/H3";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/ImageCard";
+import Card from '../components/Card';
 
 /**************test data***************/
 import { CATEGORIES, PROMOTIONS } from "../data/testData";
-import Card from '../components/Card';
 /**************************************/
 
 const HomeScreen = ({ route, navigation }) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(productActions.fetchProducts());
+    }, [dispatch]);
 
     const ranges = useSelector(state => state.ranges.ranges);
-
 
     //horizontal flatlists
     const renderCategory = itemData => {

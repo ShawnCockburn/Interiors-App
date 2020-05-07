@@ -14,7 +14,7 @@ const getFilteredProducts = (productIds, allProducts) => {
     let products = [];
     productIds.map(f => {
         const found = allProducts.find(a => a.id === f);
-        if (found !== undefined || found !== null) {
+        if (found !== undefined) {
             products.push(found);
         }
     });

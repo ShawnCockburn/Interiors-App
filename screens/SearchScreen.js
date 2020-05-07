@@ -65,12 +65,6 @@ const SearchScreen = ({ route, navigation }) => {
     const renderResult = itemData => {
         //todo: style this component for differnt screen sizes 
         return itemData !== undefined ? (
-            // <View style={styles.flatListElementConstainer}>
-            //     <P>
-            //         {itemData.item.name}
-            //     </P>
-            // </View>
-
 
             <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.itemData.id, title: itemData.item.itemData.code })}>
                 <View style={styles.cartItemElementConstainer}>

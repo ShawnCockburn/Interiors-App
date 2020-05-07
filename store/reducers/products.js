@@ -1,10 +1,20 @@
-import {PRODUCTS} from "../../data/testData";
+// import {PRODUCTS} from "../../data/testData";
+
+import { SET_PRODUCTS } from "../actions/products";
 
 const initialState = {
-    availableProducts: PRODUCTS
+    availableProducts: []
 };
 
 
 export default (state = initialState, action) => {
-    return state;
+    switch (action.type) {
+        case SET_PRODUCTS:
+            return {
+                availableProducts: action.products
+            };
+    
+        default:
+            return state;
+    }
 }

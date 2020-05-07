@@ -6,7 +6,8 @@ import {
     Image,
     FlatList,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    YellowBox
 } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -22,9 +23,16 @@ import CenteredModal from "../components/CenteredModal";
 import HorizontalLine from "../components/HorizontalLine";
 
 
+
 //todo: finish styling this page
 
 const ProductScreen = ({ route, navigation }) => {
+    //error
+    YellowBox.ignoreWarnings = ['VirtualizedList:'];
+    console.ignoredYellowBox = ['VirtualizedList:'];
+
+
+    //
     const [modalVisible, setModalVisible] = useState(false);
 
     const dispatch = useDispatch();
