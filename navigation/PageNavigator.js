@@ -17,7 +17,6 @@ import ProductScreen from "../screens/ProductScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 export default () => {
 
     const theme = Theme();
@@ -37,6 +36,7 @@ export default () => {
         return (
             <Stack.Navigator initialRouteName="Search">
                 <Stack.Screen name="Search" component={SearchScreen} />
+                <Stack.Screen name="Product" component={ProductScreen} options={({ route }) => ({ title: route.params.title })} />
             </Stack.Navigator>
         );
     };
@@ -46,7 +46,7 @@ export default () => {
         return (
             <Stack.Navigator initialRouteName="Cart">
                 <Stack.Screen name="Cart" component={CartScreen} />
-                <Stack.Screen name="Product" component={ProductScreen} options={({ route }) => ({ title: route.params.title })}/>
+                <Stack.Screen name="Product" component={ProductScreen} options={({ route }) => ({ title: route.params.title })} />
             </Stack.Navigator>
         );
     };
@@ -88,7 +88,7 @@ export default () => {
         >
             <Tab.Screen name="Home" component={StandardStack} />
             <Tab.Screen name="Search" component={SearchStack} />
-            <Tab.Screen name="Cart" component={CartStack} />
+            <Tab.Screen name="Cart" component={CartStack} path="cart"/>
             <Tab.Screen name="Settings" component={SettingsStack} />
         </Tab.Navigator>
     );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Keyboard, Platform,TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, TextInput, Keyboard, Platform, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 import P from "../components/P";
@@ -13,10 +13,18 @@ const SearchBar = props => {
     const [isSearching, setIsSearching] = useState(props.focus == undefined ? false : props.focus);
     const [searchTextValue, setSearchTextValue] = useState("");
 
+    const searchCancel = () => {
+        setSearchTextValue("");
+        setIsSearching(false);
+        if (props.searchCancel){
+            props.searchCancel();
+        }
+    };
+
     const searchInput = (
         <View style={styles.textContainer}>
-            <TextInput onSubmitEditing={() => {submit()}} style={{...styles.textInput, color: theme.colors.text}} autoFocus={true} value={searchTextValue} onChangeText={text => setSearchTextValue(text)} />
-            <TouchableWithoutFeedback onPress={() => {searchCancel()}}><Ionicons name="ios-close" size={30} color="grey" /></TouchableWithoutFeedback>
+            <TextInput onSubmitEditing={() => { submit() }} style={{ ...styles.textInput, color: theme.colors.text }} autoFocus={true} value={searchTextValue} onChangeText={text => setSearchTextValue(text)} />
+            <TouchableWithoutFeedback onPress={() => { searchCancel() }}><Ionicons name="ios-close" size={30} color="grey" /></TouchableWithoutFeedback>
         </View>
     );
     const placeHolderText = (
@@ -28,10 +36,7 @@ const SearchBar = props => {
     const onSearchPress = () => {
         setIsSearching(true);
     };
-    const searchCancel = () => {
-        setSearchTextValue("");
-        setIsSearching(false);
-    };
+    
 
 
     //if keyboard closes and there is no text value then the placeholder is set
@@ -51,8 +56,10 @@ const SearchBar = props => {
 
     //when keyboard submit button is pressed
     const submit = () => {
-        if(props.onSubmitSearch && searchTextValue.trim() !== ""){
-        props.onSubmitSearch(searchTextValue);
+        if (searchTextValue.trim() !== "") {
+            if (props.onSubmitSearch) {
+                props.onSubmitSearch(searchTextValue);
+            }
         }
     }
 

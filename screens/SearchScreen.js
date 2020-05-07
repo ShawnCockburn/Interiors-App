@@ -1,77 +1,143 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Keyboard, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Keyboard, FlatList, TouchableWithoutFeedback, Dimensions, Alert } from 'react-native';
 import { useSelector } from "react-redux";
+import _ from "lodash";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Theme } from "../constants/Theme";
 
+import CenteredModal from "../components/CenteredModal";
 import P from "../components/P";
-import H3 from "../components/H3";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/ImageCard";
-import SearchItem from '../models/searchItemModel';
+import { SearchItem, searchItemType } from '../models/searchItemModel';
+import QrScanner from '../components/QrScanner';
+import product from '../models/productModel';
+
+
 
 
 const SearchScreen = ({ route, navigation }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const theme = Theme();
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return (
+                    <TouchableWithoutFeedback onPress={() => {
+                        setModalVisible(true);
+                    }}>
+                        <View style={{ marginRight: 12 }}>
+                            <MaterialCommunityIcons name="qrcode-scan" size={24} color={theme.colors.text} />
+                        </View>
+                    </TouchableWithoutFeedback>
+                )
+            }
+        })
+    })
 
     const [searchResults, setSearchResults] = useState([]);
 
     const allProducts = useSelector(state => state.products.availableProducts);
 
+    //todo: ignore case
     const searchProducts = text => {
-        const searchItems = allProducts.map(product => {
-            if (product.code.includes(text) || product.name.includes(text)) {
-                return new SearchItem(product.id, product.name, product.description, product.imageURLs.small[0]);
-            }
+        const searchItems = allProducts.filter(product => {
+            const searchQuery = _.toLower(text);
+            const code = _.toLower(product.code);
+            const name = _.toLower(product.name);
+            return (product.id === searchQuery || code === searchQuery || name.includes(searchQuery));
+        }).map(product => {
+            return new SearchItem(product.id, product.name, product.description, product.imageURLs.small[0], product, searchItemType.PRODUCT);
         });
         return searchItems;
     };
 
-    //horizontal flatlists
-    const renderResult = itemData => {
-        //todo: style this component for differnt screen sizes 
-        return itemData !== undefined ? (
-            <View style={styles.flatListElementConstainer}>
-                <P>
-                    {itemData.item.name}
-                </P>
-            </View>
-        ): <View/>;
-    };
-
-    // //horizontal flatlist 
-    // const ResultsList = props => {
-    //     return (
-    //         <View>
-    //             <FlatList
-    //                 {...props}
-    //                 style={styles.flatList}
-    //                 showsHorizontalScrollIndicator={false}
-    //                 ListHeaderComponent={flatListVerticalHeaderFooterComponant}
-    //                 ListFooterComponent={flatListVerticalHeaderFooterComponant}
-    //             />
-    //         </View>
-    //     );
-    // };
-
-    //this adds 5px padding on first and last component of horizontal Flatlist
-    const flatListVerticalHeaderFooterComponant = <View style={{ height: 5 }}></View>;
-
-    //todo: implement search
     //if search is submitted
     const onSubmitSearch = query => {
         setSearchResults(searchProducts(query));
+    };
+    const searchCancel = () => {
+        setSearchResults([]);
+    };
+
+    const renderResult = itemData => {
+        //todo: style this component for differnt screen sizes 
+        return itemData !== undefined ? (
+            // <View style={styles.flatListElementConstainer}>
+            //     <P>
+            //         {itemData.item.name}
+            //     </P>
+            // </View>
+
+
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.itemData.id, title: itemData.item.itemData.code })}>
+                <View style={styles.cartItemElementConstainer}>
+                    <ImageCard source={itemData.item.imageURL} width={80} height={80} />
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.innerCartItemText} >
+                            <P>
+                                {itemData.item.name}
+                            </P>
+                        </View>
+                        <View style={styles.innerCartItemText} >
+                            <P>
+                                {itemData.item.description.substring(0, 40)} ...
+                            </P>
+                        </View>
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
+
+
+
+        ) : <View />;
+    };
+
+    const onScan = (type, id) => {
+
+        const productExists = allProducts.some(product => product.id === id);
+        if (productExists) {
+            onSubmitSearch(id);
+            setModalVisible(false);
+            navigation.navigate("Product", { productId: id });
+        } else {
+            const AsyncAlert = async () => new Promise((resolve) => {
+                Alert.alert(
+                    "QR code scan error",
+                    "The scanned product does not exist",
+                    [
+                        {
+                            text: 'ok',
+                            onPress: () => {
+                                resolve('YES');
+                            },
+                        },
+                    ],
+                    { cancelable: false },
+                );
+            });
+            AsyncAlert().then(() => setModalVisible(false));
+        }
+
     }
 
     //Homepage JSX
     return (
-        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}} >
+        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }} >
             <View style={styles.screen}>
+                <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
+                    <QrScanner onScan={onScan} />
+                </CenteredModal>
                 {/* SearchBar */}
 
                 <View style={styles.screenPadding}>
-                    {searchResults !== [] || searchResults !== undefined ? <SearchBar style={styles.searchBar} onSubmitSearch={onSubmitSearch} focus={true} /> : <View />}
+                    <SearchBar style={styles.searchBar} onSubmitSearch={onSubmitSearch} searchCancel={searchCancel} focus={true} />
                 </View>
 
                 <View>
-                    <FlatList data={searchResults} keyExtractor={(item, index) => index.toString()} renderItem={renderResult} />
+                    {_.isEmpty(searchResults) ? <View /> : <FlatList data={searchResults} keyExtractor={(item, index) => index.toString()} renderItem={renderResult} />}
                 </View>
 
                 {/* Results */}
@@ -79,6 +145,7 @@ const SearchScreen = ({ route, navigation }) => {
         </TouchableWithoutFeedback>
     );
 };
+
 
 const styles = StyleSheet.create({
     searchBar: {
@@ -103,6 +170,23 @@ const styles = StyleSheet.create({
     flatListElementConstainer: {
         paddingVertical: 10,
         alignItems: "center"
+    },
+    cartItemElementConstainer: {
+        width: "100%",
+        maxWidth: Dimensions.get("screen").width,
+        flexDirection: "row",
+        // paddingVertical: 10,
+        alignItems: "center",
+        padding: 15,
+        paddingRight: 0
+    },
+    cartItemInnerElementConstainer: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    modalView: {
+        width: Dimensions.get("window").width / 1.25,
+        height: Dimensions.get("window").width / 1.25
     }
 });
 

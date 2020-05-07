@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     },
     productContainer: {
         paddingHorizontal: 15,
-        paddingBottom: 20
+        // paddingBottom: 20
+        paddingVertical: 10
     },
     productText: {
         padding: 1

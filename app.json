@@ -23,6 +23,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "scheme": "hillinteriors"
   }
 }

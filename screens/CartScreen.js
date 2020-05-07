@@ -48,34 +48,7 @@ const CartScreen = ({ route, navigation }) => {
         const renderResult = (itemData, rowMap) => {
             //todo: style this component for differnt screen sizes 
             const product = getProduct(itemData.item.productId);
-            // console.log()
             return (
-                // <View style={{ ...styles.cartItemElementConstainer, backgroundColor: theme.colors.background }}>
-                //     <ImageCard source={product.imageURLs.small[0]} width={80} height={80} />
-                //     <View style={{ flex: 1 }}>
-                //         <View style={styles.innerCartItemText} >
-                //             <P>
-                //                 {product.name}
-                //             </P>
-                //         </View>
-                //         <View style={styles.innerCartItemText} >
-                //             <P>
-                //                 £{itemData.item.quantity * product.price}
-                //             </P>
-                //         </View>
-                //     </View>
-
-                //     <Quantity
-                //         value={itemData.item.quantity}
-                //         increase={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity + 1) }}
-                //         decrease={() => { updateCartItemQuantity(itemData.item.productId, itemData.item.quantity - 1) }}
-                //         disabled={itemData.item.quantity > 1 ? false : true}
-                //     />
-
-                // </View>
-
-
-
                 <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.productId, title: product.code })}>
                     <View style={{ ...styles.cartItemElementConstainer, backgroundColor: theme.colors.background }}>
                         <ImageCard source={product.imageURLs.small[0]} width={80} height={80} />

@@ -18,7 +18,7 @@ const Card = props => {
     const theme = Theme();
     return (
         <Touch onPress={props.onPress} >
-            <View style={{shadowColor: theme.colors.border, ...styles.parent}}>
+            <View style={{shadowColor: theme.colors.border, ...styles.parent, ...props.shadowStyle}}>
                 <View style={{ backgroundColor: theme.colors.card, ...styles.card, ...props.style }}>
                     {props.children}
                 </View>

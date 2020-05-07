@@ -40,11 +40,14 @@ const ProductScreen = ({ route, navigation }) => {
 
     const detailIconSize = 30;
 
-    //flatlist modal numbers
-    const [quantityNumberList, setQuantityNumberList] = useState([]);
+    console.log(product)
+
+    // flatlist modal numbers
+    const [quantityNumberList, setQuantityNumberList] = useState([{ id: "1", value: 1 }]);
     useEffect(() => {
         setQuantityNumberList([...Array(product.stock).keys()].map(x => { return { id: "key-" + x, value: x + 1 } }));
     }, [cartItem]);
+
    
 
     //horizontal flatlists
@@ -58,8 +61,8 @@ const ProductScreen = ({ route, navigation }) => {
     return (
         <View style={styles.screen}>
             <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
-                <View style={{}}>
-                    <FlatList data={quantityNumberList} keyExtractor={(item, index) => { item.id.toString()}} renderItem={
+                <View>
+                    <FlatList data={quantityNumberList} keyExtractor={(item, index) => String(index)} renderItem={
                         itemData => {
                             return (
                                 <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item.value === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
