@@ -3,6 +3,8 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import { useSelector } from "react-redux";
 import { TouchableWithoutFeedback, FlatList } from 'react-native-gesture-handler';
 import * as productActions from "../store/actions/products";
+import * as rangeActions from "../store/actions/ranges";
+import * as promotionActions from "../store/actions/promotions";
 import {useDispatch} from "react-redux";
 
 import P from "../components/P";
@@ -12,7 +14,7 @@ import ImageCard from "../components/ImageCard";
 import Card from '../components/Card';
 
 /**************test data***************/
-import { CATEGORIES, PROMOTIONS } from "../data/testData";
+import { CATEGORIES } from "../data/testData";
 /**************************************/
 
 const HomeScreen = ({ route, navigation }) => {
@@ -20,9 +22,12 @@ const HomeScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         dispatch(productActions.fetchProducts());
+        dispatch(rangeActions.fetchRanges());
+        dispatch(promotionActions.fetchPromotions());
     }, [dispatch]);
 
     const ranges = useSelector(state => state.ranges.ranges);
+    const promotions = useSelector(state => state.promotions.promotions);
 
     //horizontal flatlists
     const renderCategory = itemData => {
@@ -116,7 +121,7 @@ const HomeScreen = ({ route, navigation }) => {
 
             <SectionHeader>Promotions</SectionHeader>
             <HList
-                data={PROMOTIONS}
+                data={promotions}
                 renderItem={renderPromotion}
             />
 

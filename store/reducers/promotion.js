@@ -1,17 +1,16 @@
-import { SET_RANGES } from "../actions/ranges";
+import { SET_PROMOTIONS } from "../actions/promotions";
 
 const initialState = {
-    ranges: []
+    promotions: []
 };
 
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case SET_RANGES:
+        case SET_PROMOTIONS:
             return {
-                ranges: action.ranges
+                promotions: action.promotions
             };
-    
         default:
             return state;
     }

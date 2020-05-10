@@ -11,12 +11,14 @@ import settingsReducer from "./store/reducers/settings";
 import productsReducer from "./store/reducers/products";
 import rangesReducer from "./store/reducers/ranges";
 import cartReducer from "./store/reducers/cart";
+import promotionsReducer from "./store/reducers/promotion";
 
 enableScreens();
 
 const rootReducer = combineReducers({
   settings: settingsReducer,
   products: productsReducer,
+  promotions: promotionsReducer,
   ranges: rangesReducer,
   cart: cartReducer
 });

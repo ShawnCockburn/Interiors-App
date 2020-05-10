@@ -4,8 +4,6 @@ import { useSelector } from "react-redux";
 
 import { DARKMODE_OPTIONS } from "../data/settings";
 
-
-
 export const customDarkTheme = {
     colors: {
         primary: "rgb(10, 132, 255)",

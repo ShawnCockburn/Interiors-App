@@ -1,3 +1,4 @@
+//darkmode settings
 export const DARKMODE_OPTIONS = {
     DARK: "dark",
     LIGHT: "light",

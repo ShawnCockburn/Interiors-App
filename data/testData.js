@@ -18,7 +18,7 @@ export const PROMOTIONS = [
 ];
 
 export const RANGES = [
-  new Range('1', 'Belfry', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 'https://www.baytree-interiors.co.uk/_uploads/img/headers/belfry.jpg', ["1", "2", "3", "4", "5", "6","test"]),
+  new Range('1', 'Belfry', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 'https://www.baytree-interiors.co.uk/_uploads/img/headers/belfry.jpg', ["1", "2", "3", "4", "5", "6","test", "5eb7c3913f61322b8c69e186"]),
   new Range('2', 'Reduced Chairs', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 'https://picsum.photos/200/200', ["1", "2"]),
   new Range('3', 'Clearance Desks', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 'https://picsum.photos/200/200', ["1", "2"]),
   new Range('4', 'Lamp Deals', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 'https://picsum.photos/200/200', ["1", "2"]),

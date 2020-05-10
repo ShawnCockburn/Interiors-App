@@ -16,10 +16,7 @@ const halfScreenWidth = Dimensions.get("window").width / 2;
 
 const CartScreen = ({ route, navigation }) => {
 
-    const [rowIsOpen, setRowIsOpen] = useState(false);
-
     const theme = Theme();
-
 
     const allProducts = useSelector(state => state.products.availableProducts);
     const getProduct = productId => {
@@ -96,8 +93,6 @@ const CartScreen = ({ route, navigation }) => {
                 leftOpenValue={110}
                 stopLeftSwipe={halfScreenWidth}
                 disableLeftSwipe={true}
-                onRowOpen={() => { setRowIsOpen(true) }}
-                onRowClose={() => { setRowIsOpen(false) }}
                 swipeToOpenPercent={1}
             />
         );
