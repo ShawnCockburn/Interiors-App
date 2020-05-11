@@ -10,6 +10,7 @@ import HapticButton from '../components/HapticButton';
 import H1 from '../components/H1';
 import { setDarkmode } from "../store/actions/settings";
 import P from '../components/P';
+import { logoutUser } from '../store/actions/user';
 
 const DarkmodeOptionButtons = () => {
     const theme = Theme();
@@ -62,6 +63,7 @@ const DarkmodeOptionButtons = () => {
 
 const SettingsScreen = ({ route, navigation }) => {
     const theme = Theme();
+    const dispatch = useDispatch();
 
     //SettingsScreen JSX
     return (
@@ -69,6 +71,9 @@ const SettingsScreen = ({ route, navigation }) => {
             <View style={styles.settingContainer}>
                 <H1 style={styles.optionName}>Color Theme</H1>
                 <DarkmodeOptionButtons />
+            </View>
+            <View style={{alignSelf: "center", justifyContent: "flex-end", flex: 1}}>
+            <HapticButton style={{ ...styles.submitButton, backgroundColor: theme.colors.remove }} onPress={() => (dispatch(logoutUser()))}><P>Logout</P></HapticButton>
             </View>
         </View>
     );
@@ -98,7 +103,17 @@ const styles = StyleSheet.create({
     },
     optionName: {
         fontFamily: "OpenSans-Regular"
+    },
+    submitButton: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 10,
+        marginHorizontal: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 70,
+        borderRadius: 10
     }
+
 });
 
 

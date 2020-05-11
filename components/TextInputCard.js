@@ -18,7 +18,8 @@ const TextInputCard = props => {
 const styles = StyleSheet.create({
     textInput: {
         flexGrow: 1,
-        fontSize: 16
+        fontSize: 16,
+        flex: 1
     },
     textContainer: {
         padding: 10,

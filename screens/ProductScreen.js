@@ -48,8 +48,6 @@ const ProductScreen = ({ route, navigation }) => {
 
     const detailIconSize = 30;
 
-    console.log(product)
-
     // flatlist modal numbers
     const [quantityNumberList, setQuantityNumberList] = useState([{ id: "1", value: 1 }]);
     useEffect(() => {

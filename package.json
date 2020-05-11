@@ -17,6 +17,8 @@
     "expo-blur": "~8.1.0",
     "expo-camera": "~8.2.0",
     "expo-haptics": "~8.1.0",
+    "expo-secure-store": "~8.1.0",
+    "firebase": "7.9.0",
     "lodash": "^4.17.15",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
@@ -35,11 +37,10 @@
     "react-navigation-header-buttons": "^3.0.5",
     "react-navigation-stack": "^2.3.11",
     "react-navigation-tabs": "^2.8.11",
+    "react-navigation-transitions": "^1.0.12",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "firebase": "7.9.0",
-    "expo-secure-store": "~8.1.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

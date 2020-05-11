@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Animated, Easing } from 'react-native';
 import { AppearanceProvider } from 'react-native-appearance';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,6 +17,7 @@ import ProductScreen from "../screens/ProductScreen";
 import AuthScreen from "../screens/AuthScreen";
 import { reAuthUser } from "../store/actions/user";
 import LoadingView from "../components/LoadingView";
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -117,15 +119,21 @@ export default () => {
         </Tab.Navigator>
     );
 
+    const transition = {
+        duration: 0,
+        timing: Animated.timing,
+        easing: Easing.step0,
+    }
+
     const UserAuthStack = (
-        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false, transitionSpec: { open: transition, close: transition } }}>
             <Stack.Screen component={AuthScreen} name="Login" />
         </Stack.Navigator>
     );
 
     const RootSwitchStack = () => {
-        return isLoading ? <LoadingStack/> :
-        user.idToken !== undefined ? BottomTabs : UserAuthStack;
+        return isLoading ? <LoadingStack /> :
+            user.idToken !== undefined ? BottomTabs : UserAuthStack;
     };
 
     return (

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, View, TextInput, Image, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, View, Image, Alert, Platform } from 'react-native';
 import _ from "lodash";
 import { Feather } from '@expo/vector-icons';
 import { useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import { Theme } from "../constants/Theme";
 import P from '../components/P';
 import TextInputCard from '../components/TextInputCard';
 import HapticButton from '../components/HapticButton';
-import { authenticateUser } from '../data/user';
 import { authUser } from '../store/actions/user';
 
 const AuthScreen = ({ route, navigation }) => {
@@ -29,7 +28,6 @@ const AuthScreen = ({ route, navigation }) => {
     }
 
     const checkCredentials = async () => {
-        // const authRes = await authenticateUser(email, password);
         setInvalidEmail(false);
         setInvalidPassword(false);
         dispatch(authUser(email, password, error => {
@@ -50,7 +48,7 @@ const AuthScreen = ({ route, navigation }) => {
                 <View style={styles.inputArea}>
                     {/* <CredHeader icon={<Feather name="user" size={20} color={theme.colors.text}/>} fontSize={16}>Username</CredHeader> */}
                     <TextInputCard
-                        style={invalidEmail ? { ...styles.credInput, borderColor: "red", borderWidth: 1 } : styles.credInput}
+                        style={invalidEmail ? { ...styles.credInput, borderColor: theme.colors.remove, borderWidth: 1 } : styles.credInput}
                         shadowStyle={styles.textInputShadow}
                         placeholder="Username"
                         autoCapitalize={"none"} autoCorrect={false} textContentType={"emailAddress"} keyboardType={"email-address"}
@@ -58,9 +56,9 @@ const AuthScreen = ({ route, navigation }) => {
                         value={email}
                         onChangeText={text => setEmail(text)}
                     />
-                    {invalidEmail ? <P style={{ color: theme.colors.remove }}>Incorrect Email</P> : <></>}
+                    {/* {invalidEmail ? <P style={{ color: theme.colors.remove }}>Incorrect Email</P> : <></>} */}
                     <TextInputCard
-                        style={invalidPassword ? { ...styles.credInput, borderColor: "red", borderWidth: 1 } : styles.credInput}
+                        style={invalidPassword ? { ...styles.credInput, borderColor: theme.colors.remove, borderWidth: 1 } : styles.credInput}
                         shadowStyle={styles.textInputShadow}
                         placeholder="Password"
                         secureTextEntry={true} autoCapitalize={"none"} autoCorrect={false} textContentType={"password"}
@@ -68,15 +66,16 @@ const AuthScreen = ({ route, navigation }) => {
                         value={password}
                         onChangeText={text => setPassword(text)}
                     />
-                    {invalidPassword ? <P style={{ color: theme.colors.remove }}>Incorrect Password</P> : <></>}
+                    {/* {invalidPassword ? <P style={{ color: theme.colors.remove }}>Incorrect Password</P> : <></>} */}
 
                     <HapticButton style={{ ...styles.submitButton, backgroundColor: theme.colors.tint }} onPress={() => (checkCredentials())}><P>Login</P></HapticButton>
 
                 </View>
-                <View style={styles.imageContainer}>
+                <View style={Platform.OS === "ios" ? styles.imageContainerIos : styles.imageContainerAndroid}>
                     <Image source={require("../assets/hill-logo.png")} style={{ flexShrink: 1, width: 150 }} resizeMode={"contain"} />
                 </View>
             </KeyboardAvoidingView>
+
         </TouchableWithoutFeedback>
     );
 };
@@ -87,12 +86,16 @@ const styles = StyleSheet.create({
     },
     credInput: {
         marginVertical: 15,
-        width: "100%"
+        width: "100%",
+        minHeight: 40,
+        maxHeight: 42
     },
     inputArea: {
         paddingHorizontal: 30,
         marginHorizontal: 15,
-        marginTop: "30%"
+        marginTop: "45%",
+        maxWidth: 600,
+        alignSelf: "center"
     },
     submitButton: {
         justifyContent: "center",
@@ -111,7 +114,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 3
     },
-    imageContainer: {
+    imageContainerAndroid: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "flex-end"
+    },
+    imageContainerIos: {
         alignItems: "center",
         position: "absolute",
         bottom: 10,

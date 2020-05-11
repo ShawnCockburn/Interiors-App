@@ -24,10 +24,10 @@ export const authUser = (email, password, errorCallback) => {
                 data.registered
             );
             await SecureStore.setItemAsync("user", JSON.stringify(user));
+            dispatch({ type: SET_USER, user: user });
         } else {
             errorCallback({ error: data.error, message: data.error.message });
         }
-        dispatch({ type: SET_USER, user: user });
     }
 };
 
@@ -36,11 +36,7 @@ export const reAuthUser = () => {
         const storedUser = await SecureStore.getItemAsync("user");
         let refreshedUser = new User();
         let storedData = JSON.parse(storedUser);
-        
-
-        
-
-        if (storedData !== undefined || storedData !== null) {
+        if (storedData) {
             const res = await reAuthenticateUser(storedData.refreshToken);
             const data = await res.json();
 
@@ -58,5 +54,12 @@ export const reAuthUser = () => {
             }
         }
         dispatch({ type: SET_USER, user: refreshedUser });
+    }
+};
+
+export const logoutUser = () => {
+    return async dispatch => {
+        SecureStore.deleteItemAsync("user");
+        dispatch({ type: SET_USER, user: new User() });
     }
 };
