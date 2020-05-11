@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { AppearanceProvider } from 'react-native-appearance';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import { useSelector, useDispatch } from "react-redux";
 
 import { Theme } from "../constants/Theme";
 import HomeScreen from "../screens/HomeScreen";
@@ -12,14 +13,37 @@ import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CartScreen from "../screens/CartScreen";
 import ProductScreen from "../screens/ProductScreen";
-
+import AuthScreen from "../screens/AuthScreen";
+import { reAuthUser } from "../store/actions/user";
+import LoadingView from "../components/LoadingView";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default () => {
+    const [isLoading, setIsLoading] = useState(true)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const loadExistingUser = async () => {
+            setIsLoading(true);
+            await dispatch(reAuthUser());
+            setIsLoading(false);
+        };
+        loadExistingUser();
+    }, []);
+
+    const user = useSelector(state => state.user.user);
+    // console.log(user)
 
     const theme = Theme();
+
+    const LoadingStack = () => {
+        return (
+            <Stack.Navigator initialRouteName="Loading" screenOptions={{ headerShown: false }}>
+                <Stack.Screen component={LoadingView} name="Loading" />
+            </Stack.Navigator>
+        )
+    };
 
     const StandardStack = (props) => {
         return (
@@ -88,15 +112,26 @@ export default () => {
         >
             <Tab.Screen name="Home" component={StandardStack} />
             <Tab.Screen name="Search" component={SearchStack} />
-            <Tab.Screen name="Cart" component={CartStack} path="cart"/>
+            <Tab.Screen name="Cart" component={CartStack} path="cart" />
             <Tab.Screen name="Settings" component={SettingsStack} />
         </Tab.Navigator>
     );
 
+    const UserAuthStack = (
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+            <Stack.Screen component={AuthScreen} name="Login" />
+        </Stack.Navigator>
+    );
+
+    const RootSwitchStack = () => {
+        return isLoading ? <LoadingStack/> :
+        user.idToken !== undefined ? BottomTabs : UserAuthStack;
+    };
+
     return (
         <AppearanceProvider>
             <NavigationContainer theme={theme}>
-                {BottomTabs}
+                <RootSwitchStack />
             </NavigationContainer>
         </AppearanceProvider>
     );

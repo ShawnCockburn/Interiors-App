@@ -1,6 +1,7 @@
 import Product from "../models/productModel";
 import Range from "../models/rangeModel";
 import Promotion from "../models/promotionModel";
+import { API_BASE_URL } from "./api";
 //********************** firebase ****************************//
 
 // import * as firebase from 'firebase';
@@ -50,7 +51,7 @@ import Promotion from "../models/promotionModel";
 
 //
 export const getAllProducts = async () => {
-    const apiUrl = "http://192.168.1.108:3000/products"
+    const apiUrl = API_BASE_URL+"/products"
     const res = await fetch(apiUrl);
     const resData = await res.json();
 
@@ -74,7 +75,7 @@ export const getAllProducts = async () => {
 };
 
 export const getAllRanges = async () => {
-    const apiUrl = "http://192.168.1.108:3000/ranges"
+    const apiUrl = API_BASE_URL+"/ranges"
     const res = await fetch(apiUrl);
     const resData = await res.json();
 
@@ -90,7 +91,7 @@ export const getAllRanges = async () => {
 };
 
 export const getAllPromotions = async () => {
-    const apiUrl = "http://192.168.1.108:3000/promotions"
+    const apiUrl = API_BASE_URL+"/promotions"
     const res = await fetch(apiUrl);
     const resData = await res.json();
 

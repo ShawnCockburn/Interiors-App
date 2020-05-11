@@ -12,6 +12,7 @@ import productsReducer from "./store/reducers/products";
 import rangesReducer from "./store/reducers/ranges";
 import cartReducer from "./store/reducers/cart";
 import promotionsReducer from "./store/reducers/promotion";
+import userReducer from "./store/reducers/user";
 
 enableScreens();
 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   products: productsReducer,
   promotions: promotionsReducer,
   ranges: rangesReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  user: userReducer
 });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
