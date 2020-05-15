@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react"
-import { Animated, Easing } from 'react-native';
 import { AppearanceProvider } from 'react-native-appearance';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 
 import { Theme } from "../constants/Theme";
 import HomeScreen from "../screens/HomeScreen";
 import ProductListScreen from '../screens/ProductListScreen';
 import SearchScreen from "../screens/SearchScreen";
-import SettingsScreen from "../screens/SettingsScreen";
+import UserScreen from "../screens/UserScreen";
 import CartScreen from "../screens/CartScreen";
 import ProductScreen from "../screens/ProductScreen";
 import AuthScreen from "../screens/AuthScreen";
@@ -78,10 +77,10 @@ export default () => {
     };
 
 
-    const SettingsStack = () => {
+    const UserStack = () => {
         return (
-            <Stack.Navigator initialRouteName="HomeScreen">
-                <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Navigator initialRouteName="User">
+                <Stack.Screen name="User" component={UserScreen} />
             </Stack.Navigator>
         );
     };
@@ -97,8 +96,8 @@ export default () => {
                         icon = <AntDesign name="home" size={size} color={color} />;
                     } else if (route.name === 'Search') {
                         icon = <Ionicons name="md-search" size={size} color={color} />;
-                    } else if (route.name === 'Settings') {
-                        icon = <SimpleLineIcons name="settings" size={size} color={color} />;
+                    } else if (route.name === 'User') {
+                        icon = <AntDesign name="user" size={size} color={color} />;
                     } else if (route.name === 'Cart') {
                         icon = <AntDesign name="shoppingcart" size={size} color={color} />;
                     }
@@ -115,19 +114,15 @@ export default () => {
             <Tab.Screen name="Home" component={StandardStack} />
             <Tab.Screen name="Search" component={SearchStack} />
             <Tab.Screen name="Cart" component={CartStack} path="cart" />
-            <Tab.Screen name="Settings" component={SettingsStack} />
+            <Tab.Screen name="User" component={UserStack} />
         </Tab.Navigator>
     );
 
-    const transition = {
-        duration: 0,
-        timing: Animated.timing,
-        easing: Easing.step0,
-    }
-
     const UserAuthStack = (
-        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false, transitionSpec: { open: transition, close: transition } }}>
-            <Stack.Screen component={AuthScreen} name="Login" />
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+            <Stack.Screen component={AuthScreen} name="Login" options={{
+                animationTypeForReplace: 'pop'
+            }}/>
         </Stack.Navigator>
     );
 

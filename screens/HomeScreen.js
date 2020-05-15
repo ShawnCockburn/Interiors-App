@@ -5,6 +5,7 @@ import { TouchableWithoutFeedback, FlatList } from 'react-native-gesture-handler
 import * as productActions from "../store/actions/products";
 import * as rangeActions from "../store/actions/ranges";
 import * as promotionActions from "../store/actions/promotions";
+import * as cartActions from "../store/actions/cart";
 import {useDispatch} from "react-redux";
 
 import P from "../components/P";
@@ -24,6 +25,7 @@ const HomeScreen = ({ route, navigation }) => {
         dispatch(productActions.fetchProducts());
         dispatch(rangeActions.fetchRanges());
         dispatch(promotionActions.fetchPromotions());
+        dispatch(cartActions.getCart());
     }, [dispatch]);
 
     const ranges = useSelector(state => state.ranges.ranges);

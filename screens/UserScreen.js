@@ -61,7 +61,7 @@ const DarkmodeOptionButtons = () => {
     }
 };
 
-const SettingsScreen = ({ route, navigation }) => {
+const UserScreen = ({ route, navigation }) => {
     const theme = Theme();
     const dispatch = useDispatch();
 
@@ -117,4 +117,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SettingsScreen;
+export default UserScreen;
