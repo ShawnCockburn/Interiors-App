@@ -11,7 +11,7 @@ export const addToCart = (productId, quantity) => {
         const cartItem = {...new CartItem(productId, quantity)};
         const state = getState();
         const {idToken, localId} = state.user.user;
-        const fetchedCart = await API.API_DATA.Cart.update(idToken, localId, cartItem);
+        const fetchedCart = await API.API_DATA.Cart.update(localId, idToken, cartItem);
         if (fetchedCart)  dispatch({
             type: ADD_TO_CART,
             payload: fetchedCart
@@ -25,19 +25,12 @@ export const removeFromCart = productId => {
         const cartItem = {...new CartItem(productId, 1)};
         const state = getState();
         const {idToken, localId} = state.user.user;
-        const fetchedCart = await API.API_DATA.Cart.delete(idToken, localId, cartItem);
+        const fetchedCart = await API.API_DATA.Cart.delete(localId, idToken, cartItem);
         if (fetchedCart)  dispatch({
             type: UPDATE_CART_QUANTITY,
             payload: fetchedCart
         });
     }
-
-    // return {
-    //     type: REMOVE_FROM_CART,
-    //     payload: {
-    //         productId
-    //     }
-    // }
 };
 
 export const updateCartQuantity = (productId, quantity) => {
@@ -45,28 +38,19 @@ export const updateCartQuantity = (productId, quantity) => {
         const cartItem = {...new CartItem(productId, quantity)};
         const state = getState();
         const {idToken, localId} = state.user.user;
-        const fetchedCart = await API.API_DATA.Cart.update(idToken, localId, cartItem);
+        const fetchedCart = await API.API_DATA.Cart.update(localId, idToken, cartItem);
         if (fetchedCart)  dispatch({
             type: UPDATE_CART_QUANTITY,
             payload: fetchedCart
         });
     }
-
-    // return {
-    //     type: UPDATE_CART_QUANTITY,
-    //     payload: {
-    //         productId,
-    //         quantity: quantity
-    //     }
-
-    // }
 };
 
 export const getCart = () => {
     return async (dispatch, getState, API) => {
         const state = getState();
         const {idToken, localId} = state.user.user;
-        const fetchedCart = await API.API_DATA.Cart.get.all(idToken, localId);
+        const fetchedCart = await API.API_DATA.Cart.get.all( localId, idToken);
         if (fetchedCart)  dispatch({
             type: ADD_TO_CART,
             payload: fetchedCart

@@ -22,12 +22,13 @@ export const API_ROUTES = {
         ROOT: "/user"
     }
 }
-export const apiRequest = async (route, authToken, method, body = {}, headers = {}) => {
+export const apiRequest = async (route, userId, authToken, method, body = {}, headers = {}) => {
     if (!route) return;
     if (!method) method = "GET";
     const options = {
         method: method,
         headers: {
+            "user_id": userId,
             "auth_token": authToken,
             'Content-Type': 'application/json',
             ...headers
@@ -48,8 +49,8 @@ export const apiRequest = async (route, authToken, method, body = {}, headers = 
 
 //api data using api request
 
-const getAllProducts = async (authToken) => {
-    const res = await apiRequest(API_ROUTES.PRODUCTS.ROOT, authToken);
+const getAllProducts = async (userId, authToken) => {
+    const res = await apiRequest(API_ROUTES.PRODUCTS.ROOT, userId, authToken);
     const resData = await res.json();
 
     if (!resData) return;
@@ -72,8 +73,8 @@ const getAllProducts = async (authToken) => {
     });
 };
 
-const getAllRanges = async (authToken) => {
-    const res = await apiRequest(API_ROUTES.RANGES.ROOT, authToken);
+const getAllRanges = async (userId, authToken) => {
+    const res = await apiRequest(API_ROUTES.RANGES.ROOT, userId, authToken);
     const resData = await res.json();
 
     if (!resData) return;
@@ -89,8 +90,8 @@ const getAllRanges = async (authToken) => {
     });
 };
 
-const getAllPromotions = async (authToken) => {
-    const res = await apiRequest(API_ROUTES.PROMOTIONS.ROOT, authToken);
+const getAllPromotions = async (userId, authToken) => {
+    const res = await apiRequest(API_ROUTES.PROMOTIONS.ROOT, userId, authToken);
     const resData = await res.json();
     if (!resData) return;
 
@@ -104,10 +105,7 @@ const getAllPromotions = async (authToken) => {
 };
 
 const getCart = async (userId, authToken) => {
-    const body = {
-        userId: userId
-    }
-    const res = await apiRequest(API_ROUTES.CART.ROOT, authToken);
+    const res = await apiRequest(API_ROUTES.CART.ROOT, userId, authToken);
     const resData = await res.json();
     if (!resData) return;
 
@@ -119,14 +117,13 @@ const getCart = async (userId, authToken) => {
     });
 };
 
-const setCart = async (authToken, userId, cartItems ) => {
+const setCart = async ( userId, authToken, cartItems ) => {
 
     const body = {
-        userId: userId,
         cart: cartItems
     }
 
-    const res = await apiRequest(API_ROUTES.CART.ROOT, authToken, "POST", body);
+    const res = await apiRequest(API_ROUTES.CART.ROOT, userId, authToken, "POST", body);
     const resData = await res.json();
     if (!resData) return;
 
@@ -138,14 +135,13 @@ const setCart = async (authToken, userId, cartItems ) => {
     });
 };
 
-const updateCart = async (authToken, userId, cartItem, method ) => {
+const updateCart = async (userId, authToken, cartItem, method ) => {
 
     const body = {
-        userId: userId,
         cartItem: cartItem
     }
 
-    const res = await apiRequest(API_ROUTES.CART.ROOT, authToken, method, body);
+    const res = await apiRequest(API_ROUTES.CART.ROOT, userId, authToken, method, body);
     const resData = await res.json();
     if (!resData) return;
 
@@ -157,43 +153,12 @@ const updateCart = async (authToken, userId, cartItem, method ) => {
     });
 };
 
-const updateCartItem = async (authToken, userId, cartItem ) => {
-
-    return updateCart(authToken,userId, cartItem, "PUT");
-    // const body = {
-    //     userId: userId,
-    //     cartItem: cartItem
-    // }
-
-    // const res = await apiRequest(API_ROUTES.CART.ROOT, authToken, "PUT", body);
-    // const resData = await res.json();
-    // if (!resData) return;
-
-    // return resData.cart.map(cartItem => {
-    //     return new CartItem(
-    //         cartItem.productId,
-    //         cartItem.quantity
-    //     );
-    // });
+const updateCartItem = async ( userId, authToken, cartItem ) => {
+    return updateCart( userId, authToken, cartItem, "PUT");
 };
 
-const deleteCartItem = async (authToken, userId, cartItem ) => {
-    return updateCart(authToken, userId, cartItem, "DELETE");
-    // const body = {
-    //     userId: userId,
-    //     cartItem: cartItem
-    // }
-
-    // const res = await apiRequest(API_ROUTES.CART.ROOT, authToken, "DELETE", body);
-    // const resData = await res.json();
-    // if (!resData) return;
-
-    // return resData.cart.map(cartItem => {
-    //     return new CartItem(
-    //         cartItem.productId,
-    //         cartItem.quantity
-    //     );
-    // });
+const deleteCartItem = async (userId, authToken, cartItem ) => {
+    return updateCart( userId, authToken, cartItem, "DELETE");
 };
 
 export const API_DATA = {
