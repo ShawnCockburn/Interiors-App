@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     StyleSheet,
     View,
@@ -12,6 +12,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addToCart, removeFromCart, UPDATE_CART_QUANTITY, updateCartQuantity } from '../store/actions/cart';
+import * as productActions from "../store/actions/products";
+import * as cartActions from "../store/actions/cart";
 
 import P from "../components/P";
 import H2 from "../components/H2";
@@ -22,14 +24,28 @@ import { Theme } from '../constants/Theme';
 import CenteredModal from "../components/CenteredModal";
 import HorizontalLine from "../components/HorizontalLine";
 
+import ReduxActionDependencyLoading from '../components/ReduxActionDependencyLoading';
 
-
-//todo: finish styling this page
+const loadingDependencies = [productActions.fetchProducts, cartActions.getCart];
 
 const ProductScreen = ({ route, navigation }) => {
-    //error
-    YellowBox.ignoreWarnings = ['VirtualizedList:'];
-    console.ignoredYellowBox = ['VirtualizedList:'];
+
+    //reload products from server on navigation
+    const dependencyLoaderRef = useRef(null);
+    const isFirstRender = dependencyLoaderRef.current === null ? true : false;
+
+    const handleDependencyReload = () => {
+        if (!isFirstRender) dependencyLoaderRef.current.load(true);
+    };
+
+    useEffect(() => {
+        return navigation.addListener('focus', handleDependencyReload);
+    },[handleDependencyReload]);
+
+
+    //error that does not matter
+    YellowBox.ignoreWarnings(['VirtualizedList: missing keys for items, make sure to specify a key or id property on each item or provide a custom keyExtractor.']);
+    console.ignoredYellowBox = ['VirtualizedList: missing keys for items, make sure to specify a key or id property on each item or provide a custom keyExtractor.'];
 
 
     //
@@ -54,7 +70,7 @@ const ProductScreen = ({ route, navigation }) => {
         setQuantityNumberList([...Array(product.stock).keys()].map(x => { return { id: "key-" + x, value: x + 1 } }));
     }, [cartItem]);
 
-   
+
 
     //horizontal flatlists
     const renderProductImage = itemData => {
@@ -64,7 +80,9 @@ const ProductScreen = ({ route, navigation }) => {
     };
 
     //Homepage JSX
-    return (
+
+    const loadedView = () => (
+
         <View style={styles.screen}>
             <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
                 <View>
@@ -177,6 +195,7 @@ const ProductScreen = ({ route, navigation }) => {
             </ScrollView>
         </View>
     );
+    return <ReduxActionDependencyLoading ref={dependencyLoaderRef} loadedView={loadedView} dependencies={loadingDependencies} />
 };
 
 

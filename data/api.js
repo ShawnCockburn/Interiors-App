@@ -1,6 +1,7 @@
 import Product from "../models/productModel";
 import Range from "../models/rangeModel";
 import Promotion from "../models/promotionModel";
+import Category from "../models/categoryModel";
 import CartItem from "../models/cartItemModel";
 
 //api request
@@ -8,6 +9,9 @@ export const API_BASE_URL = "http://192.168.1.108:3000";
 export const API_ROUTES = {
     CART: {
         ROOT: "/cart"
+    },
+    CATEGORIES: {
+        ROOT: "/categories"
     },
     PRODUCTS: {
         ROOT: "/products"
@@ -104,6 +108,20 @@ const getAllPromotions = async (userId, authToken) => {
     });
 };
 
+const getAllCategories = async (userId, authToken) => {
+    const res = await apiRequest(API_ROUTES.CATEGORIES.ROOT, userId, authToken);
+    const resData = await res.json();
+    if (!resData) return;
+
+    return resData.map(category => {
+        return new Category(
+            category._id,
+            category.title,
+            category.imageURL
+        );
+    });
+};
+
 const getCart = async (userId, authToken) => {
     const res = await apiRequest(API_ROUTES.CART.ROOT, userId, authToken);
     const resData = await res.json();
@@ -184,5 +202,10 @@ export const API_DATA = {
         set: setCart,
         update: updateCartItem,
         delete: deleteCartItem
+    },
+    Categories: {
+        get: {
+            all: getAllPromotions
+        }
     }
 };

@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 import { EvilIcons } from "@expo/vector-icons";
+
+import * as productActions from "../store/actions/products";
+import * as cartActions from "../store/actions/cart";
 
 import P from "../components/P";
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -10,11 +13,28 @@ import { updateCartQuantity, removeFromCart } from '../store/actions/cart';
 import ImageCard from '../components/ImageCard';
 import Quantity from "../components/Quantity";
 import { Theme } from '../constants/Theme';
+import ReduxActionDependencyLoading from '../components/ReduxActionDependencyLoading';
 
 const halfScreenWidth = Dimensions.get("window").width / 2;
 
+const loadingDependencies = [productActions.fetchProducts, cartActions.getCart];
 
 const CartScreen = ({ route, navigation }) => {
+
+    //reload cart items from server on navigation
+    const dependencyLoaderRef = useRef(null);
+    const isFirstRender = dependencyLoaderRef.current === null ? true : false;
+
+    const handleDependencyReload = () => {
+        if (!isFirstRender) dependencyLoaderRef.current.load(true);
+    };
+
+    useEffect(() => {
+        const listener = navigation.addListener('focus', handleDependencyReload);
+        return listener;
+    },[handleDependencyReload, navigation]);
+
+    const dispatch = useDispatch();
 
     const theme = Theme();
 
@@ -24,8 +44,6 @@ const CartScreen = ({ route, navigation }) => {
     };
 
     const cartItems = useSelector(state => state.cart.items);
-
-    const dispatch = useDispatch();
 
     const updateCartItemQuantity = (productId, quantity) => {
         dispatch(updateCartQuantity(productId, quantity));
@@ -80,8 +98,8 @@ const CartScreen = ({ route, navigation }) => {
         //delete item
 
         const renderHiddenDeleteItem = (data, rowMap) => (
-            <View style={{ ...styles.rowBack, backgroundColor: theme.colors.remove, width: halfScreenWidth}}>
-                <TouchableOpacity onPress={() => { dispatch(removeFromCart(data.item.productId)) }} style={{padding: 20}}>
+            <View style={{ ...styles.rowBack, backgroundColor: theme.colors.remove, width: halfScreenWidth }}>
+                <TouchableOpacity onPress={() => { dispatch(removeFromCart(data.item.productId)) }} style={{ padding: 20 }}>
                     <EvilIcons name="trash" size={38} color={"white"} />
                 </TouchableOpacity>
             </View>
@@ -105,13 +123,15 @@ const CartScreen = ({ route, navigation }) => {
         return _.isEmpty(props.cartItemData) ? placeholder : productList;
     }
 
-
-    //Homepage JSX
-    return (
+    const loadedView = () => (
         <View style={styles.root}>
             <CartList cartItemData={cartItems} />
         </View>
     );
+
+
+    //Homepage JSX
+    return <ReduxActionDependencyLoading ref={dependencyLoaderRef} dependencies={loadingDependencies} loadedView={loadedView} />
 };
 
 const styles = StyleSheet.create({

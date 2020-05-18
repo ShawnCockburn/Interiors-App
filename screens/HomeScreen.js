@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { useSelector } from "react-redux";
 import { TouchableWithoutFeedback, FlatList } from 'react-native-gesture-handler';
@@ -6,30 +6,23 @@ import * as productActions from "../store/actions/products";
 import * as rangeActions from "../store/actions/ranges";
 import * as promotionActions from "../store/actions/promotions";
 import * as cartActions from "../store/actions/cart";
-import {useDispatch} from "react-redux";
+import * as categoryActions from "../store/actions/categories";
+import { useDispatch } from "react-redux";
 
 import P from "../components/P";
 import H3 from "../components/H3";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/ImageCard";
 import Card from '../components/Card';
+import ReduxActionDependencyLoading from '../components/ReduxActionDependencyLoading';
 
-/**************test data***************/
-import { CATEGORIES } from "../data/testData";
-/**************************************/
+const loadingDependencies = [productActions.fetchProducts, rangeActions.fetchRanges, promotionActions.fetchPromotions, cartActions.getCart, categoryActions.fetchCategories];
 
 const HomeScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(productActions.fetchProducts());
-        dispatch(rangeActions.fetchRanges());
-        dispatch(promotionActions.fetchPromotions());
-        dispatch(cartActions.getCart());
-    }, [dispatch]);
-
     const ranges = useSelector(state => state.ranges.ranges);
     const promotions = useSelector(state => state.promotions.promotions);
+    const categories = useSelector(state => state.categories.categories);
 
     //horizontal flatlists
     const renderCategory = itemData => {
@@ -56,18 +49,18 @@ const HomeScreen = ({ route, navigation }) => {
     const renderRange = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", {productIds: itemData.item.productIds, title: itemData.item.name})}>
-            <View style={{...styles.flatListHorizontalElementConstainer, ...styles.bottomHlist}}>
-                <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
-                <Card style={{ ...styles.trendingProductText, width: 180 }}>
-                    <H3>
-                        {itemData.item.name}
-                    </H3>
-                    <P>
-                        {itemData.item.description.substring(0, 43) + "..."}
-                    </P>
-                </Card>
-            </View>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", { productIds: itemData.item.productIds, title: itemData.item.name })}>
+                <View style={{ ...styles.flatListHorizontalElementConstainer, ...styles.bottomHlist }}>
+                    <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+                    <Card style={{ ...styles.trendingProductText, width: 180 }}>
+                        <H3>
+                            {itemData.item.name}
+                        </H3>
+                        <P>
+                            {itemData.item.description.substring(0, 43) + "..."}
+                        </P>
+                    </Card>
+                </View>
             </TouchableWithoutFeedback>
         );
     };
@@ -78,14 +71,14 @@ const HomeScreen = ({ route, navigation }) => {
     const HList = props => {
         return (
             // <View >
-                <FlatList
-                    {...props}
-                    style={{...styles.flatListHorizontal, ...props.style}}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
-                    ListFooterComponent={flatListHorizontalHeaderFooterComponant}
-                />
+            <FlatList
+                {...props}
+                style={{ ...styles.flatListHorizontal, ...props.style }}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                ListHeaderComponent={flatListHorizontalHeaderFooterComponant}
+                ListFooterComponent={flatListHorizontalHeaderFooterComponant}
+            />
             // </View>
         );
     };
@@ -102,7 +95,8 @@ const HomeScreen = ({ route, navigation }) => {
     }
 
     //Homepage JSX
-    return (
+
+    const loadedView = () => (
         <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
 
             {/* SearchBar */}
@@ -115,7 +109,7 @@ const HomeScreen = ({ route, navigation }) => {
 
             <SectionHeader>Categories</SectionHeader>
             <HList
-                data={CATEGORIES}
+                data={categories}
                 renderItem={renderCategory}
             />
 
@@ -136,6 +130,8 @@ const HomeScreen = ({ route, navigation }) => {
             />
         </ScrollView>
     );
+
+    return <ReduxActionDependencyLoading loadedView={loadedView} dependencies={loadingDependencies}/>
 };
 
 const styles = StyleSheet.create({

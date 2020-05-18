@@ -7,6 +7,7 @@ import rangesReducer from "../store/reducers/ranges";
 import cartReducer from "../store/reducers/cart";
 import promotionsReducer from "../store/reducers/promotion";
 import userReducer from "../store/reducers/user";
+import categoriesReducer from "../store/reducers/categories";
 
 import * as API from "../data/api"
 
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     promotions: promotionsReducer,
     ranges: rangesReducer,
     cart: cartReducer,
-    user: userReducer
+    user: userReducer,
+    categories: categoriesReducer
   });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk.withExtraArgument(API)));
 
