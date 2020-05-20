@@ -55,3 +55,14 @@ export const reAuthenticateUser = async token => {
 
     return res;
 };
+
+export const calculateUserAuthExpireSafe = expiresInSeconds => {
+    let expiresInMilis = (Number.parseInt(expiresInSeconds) - 1) * 1000;
+    const currentUnixEpoch = Date.now();
+
+    return currentUnixEpoch + expiresInSeconds;
+};
+
+export const authTokenIsExpired = expiresMilis => {
+    return Date.now() > expiresMilis;
+};

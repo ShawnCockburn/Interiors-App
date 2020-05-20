@@ -1,4 +1,4 @@
-import { authenticateUser, reAuthenticateUser } from "../../data/user";
+import { authenticateUser, reAuthenticateUser, calculateUserAuthExpireSafe } from "../../data/user";
 import * as SecureStore from 'expo-secure-store';
 import User from "../../models/userModel";
 
@@ -21,7 +21,8 @@ export const authUser = (email, password, errorCallback) => {
                 data.refreshToken,
                 data.expiresIn,
                 data.localId,
-                data.registered
+                data.registered,
+                calculateUserAuthExpireSafe(data.expiresIn)
             );
             await SecureStore.setItemAsync("user", JSON.stringify(user));
             dispatch({ type: SET_USER, user: user });
@@ -48,7 +49,8 @@ export const reAuthUser = () => {
                     refreshedData.refreshToken,
                     refreshedData.expiresIn,
                     refreshedData.localId,
-                    refreshedData.registered
+                    refreshedData.registered,
+                    calculateUserAuthExpireSafe(refreshedData.expiresIn)
                 );
                 await SecureStore.setItemAsync("user", JSON.stringify(refreshedUser));
             }

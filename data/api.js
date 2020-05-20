@@ -1,3 +1,5 @@
+import * as HttpStatus from 'http-status-codes';
+
 import Product from "../models/productModel";
 import Range from "../models/rangeModel";
 import Promotion from "../models/promotionModel";
@@ -46,6 +48,7 @@ export const apiRequest = async (route, userId, authToken, method, body = {}, he
 
     //todo: display error message if there is error
     if (!res.ok) {console.log(await res.json());return;}
+    // if (res.status === HttpStatus.UNAUTHORIZED)
 
     return res;
 };

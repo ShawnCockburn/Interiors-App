@@ -65,9 +65,10 @@ const ProductScreen = ({ route, navigation }) => {
     const detailIconSize = 30;
 
     // flatlist modal numbers
-    const [quantityNumberList, setQuantityNumberList] = useState([{ id: "1", value: 1 }]);
+    const [quantityNumberList, setQuantityNumberList] = useState([1]);
+    // const [quantityNumberList, setQuantityNumberList] = useState([{ id: "1", value: 1 }]);
     useEffect(() => {
-        setQuantityNumberList([...Array(product.stock).keys()].map(x => { return { id: "key-" + x, value: x + 1 } }));
+        setQuantityNumberList([...Array(product.stock).keys()]);
     }, [cartItem]);
 
 
@@ -79,20 +80,16 @@ const ProductScreen = ({ route, navigation }) => {
         );
     };
 
-    //Homepage JSX
-
-    const loadedView = () => (
-
-        <View style={styles.screen}>
+    const QuantitySelectorModal = () => (
             <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
                 <View>
-                    <FlatList data={quantityNumberList} keyExtractor={(item, index) => String(index)} renderItem={
+                    <FlatList data={quantityNumberList} keyExtractor={(item, index) => index.toString()} renderItem={
                         itemData => {
                             return (
-                                <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item.value === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
-                                    onPress={() => { dispatch(updateCartQuantity(productId, itemData.item.value)); setModalVisible(false) }}>
+                                <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
+                                    onPress={() => { dispatch(updateCartQuantity(productId, itemData.item)); setModalVisible(false) }}>
                                     <View style={{ alignItems: "center", padding: 10 }}>
-                                        <P>{itemData.item.value}</P>
+                                        <P>{itemData.item}</P>
                                     </View>
                                     <HorizontalLine style={{ borderColor: "grey" }} />
                                 </TouchableOpacity>
@@ -102,6 +99,14 @@ const ProductScreen = ({ route, navigation }) => {
                     />
                 </View>
             </CenteredModal>
+        );
+
+    //Homepage JSX
+
+    const loadedView = () => (
+
+        <View style={styles.screen}>
+            <QuantitySelectorModal/>
             <ScrollView style={styles.screen} keyboardShouldPersistTaps="never">
 
                 {/* images */}
