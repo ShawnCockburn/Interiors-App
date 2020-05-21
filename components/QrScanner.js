@@ -3,7 +3,7 @@ import { Text, StyleSheet, Image, Platform } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 
-import { Linking } from 'expo';
+// import { Linking } from 'expo';
 
 const QrScanner = props => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -19,12 +19,15 @@ const QrScanner = props => {
     }, []);
 
 
-
+// schema shourl look like this
+// [path] = [id for path]
+//example "product=5eb7c3913f61322b8c69e186"
     const handleBarCodeScanned = ({ type, data }) => {
-        let { path, queryParams } = Linking.parse(data);
-        if (path === "products") {
+        // let { path, queryParams } = Linking.parse(data);
+        const [path, targetId] = data.split("=");
+        if (path === "product") {
             setScanned(true);
-            props.onScan("product", queryParams.id);
+            props.onScan("product", targetId);
         }
 
     };
