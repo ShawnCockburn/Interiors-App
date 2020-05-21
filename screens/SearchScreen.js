@@ -11,7 +11,6 @@ import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/ImageCard";
 import { SearchItem, searchItemType } from '../models/searchItemModel';
 import QrScanner from '../components/QrScanner';
-import product from '../models/productModel';
 
 
 
@@ -49,7 +48,7 @@ const SearchScreen = ({ route, navigation }) => {
             const name = _.toLower(product.name);
             return (product.id === searchQuery || code === searchQuery || name.includes(searchQuery));
         }).map(product => {
-            return new SearchItem(product.id, product.name, product.description, product.imageURLs.small[0], product, searchItemType.PRODUCT);
+            return new SearchItem(product.id, product.name, product.description, product.price, product.imageURLs.small[0], product, searchItemType.PRODUCT);
         });
         return searchItems;
     };
@@ -69,15 +68,15 @@ const SearchScreen = ({ route, navigation }) => {
             <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.itemData.id, title: itemData.item.itemData.code })}>
                 <View style={styles.cartItemElementConstainer}>
                     <ImageCard source={itemData.item.imageURL} width={80} height={80} />
-                    <View style={{ flex: 1 }}>
+                    <View style={styles.itemInfoContainer}>
                         <View style={styles.innerCartItemText} >
-                            <P>
+                            <P style={styles.infoText}>
                                 {itemData.item.name}
                             </P>
                         </View>
                         <View style={styles.innerCartItemText} >
-                            <P>
-                                {itemData.item.description.substring(0, 40)} ...
+                            <P style={styles.infoText}>
+                                £{itemData.item.price}
                             </P>
                         </View>
                     </View>
@@ -177,6 +176,16 @@ const styles = StyleSheet.create({
     cartItemInnerElementConstainer: {
         flexDirection: "row",
         alignItems: "center"
+    },
+    itemInfoContainer: {
+        flex: 1,
+        height: 80,
+        padding: 2,
+        paddingHorizontal: 8,
+        justifyContent: "space-between"
+    },
+    infoText: {
+        fontSize: 16
     },
     modalView: {
         width: Dimensions.get("window").width / 1.25,
