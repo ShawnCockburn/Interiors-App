@@ -35,7 +35,6 @@ export default () => {
     }, []);
 
     const user = useSelector(state => state.user.user);
-    // console.log(user)
 
     const theme = Theme();
 
@@ -132,10 +131,11 @@ export default () => {
             user.idToken !== undefined ? BottomTabs : UserAuthStack;
     };
 
-    const userAuthCheck = () => {
-        if (authTokenIsExpired(user.expiresOn)) {console.log("user expired, re authenticating"); dispatch(reAuthUser());}
-    };
-    userAuthCheck();
+    // const userAuthCheck = () => {
+    //     // if (authTokenIsExpired(user.expiresOn)) {console.log("user expired, re authenticating"); dispatch(reAuthUser());}
+    //     console.log("user expired, re authenticating");
+    // };
+    // userAuthCheck();
 
     return (
         <AppearanceProvider>

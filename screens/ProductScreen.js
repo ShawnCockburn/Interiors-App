@@ -6,12 +6,11 @@ import {
     Image,
     FlatList,
     Dimensions,
-    TouchableOpacity,
-    YellowBox
+    TouchableOpacity
 } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { addToCart, removeFromCart, UPDATE_CART_QUANTITY, updateCartQuantity } from '../store/actions/cart';
+import { addToCart, removeFromCart, updateCartQuantity } from '../store/actions/cart';
 import * as productActions from "../store/actions/products";
 import * as cartActions from "../store/actions/cart";
 
@@ -25,10 +24,20 @@ import CenteredModal from "../components/CenteredModal";
 import HorizontalLine from "../components/HorizontalLine";
 
 import ReduxActionDependencyLoading from '../components/ReduxActionDependencyLoading';
+import LoadingView from '../components/LoadingView';
 
 const loadingDependencies = [productActions.fetchProducts, cartActions.getCart];
 
 const ProductScreen = ({ route, navigation }) => {
+    //setup
+    const theme = Theme();
+    const dispatch = useDispatch();
+
+    //for icons at bottom of page
+    const detailIconSize = 30;
+
+    //setup modal visible state hook
+    const [modalVisible, setModalVisible] = useState(false);
 
     //reload products from server on navigation
     const dependencyLoaderRef = useRef(null);
@@ -37,76 +46,62 @@ const ProductScreen = ({ route, navigation }) => {
     const handleDependencyReload = () => {
         if (!isFirstRender) dependencyLoaderRef.current.load(true);
     };
-
     useEffect(() => {
         return navigation.addListener('focus', handleDependencyReload);
-    },[handleDependencyReload]);
+    }, [handleDependencyReload]);
 
-
-    //error that does not matter
-    YellowBox.ignoreWarnings(['VirtualizedList: missing keys for items, make sure to specify a key or id property on each item or provide a custom keyExtractor.']);
-    console.ignoredYellowBox = ['VirtualizedList: missing keys for items, make sure to specify a key or id property on each item or provide a custom keyExtractor.'];
-
-
-    //
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const dispatch = useDispatch();
-
+    //get current product data
     const productId = route.params.productId;
     const product = useSelector(state =>
         state.products.availableProducts.find(prod => prod.id === productId));
     const cartItem = useSelector(state =>
         state.cart.items.find(prod => prod.productId === productId));
 
-    const theme = Theme();
+    const [images, setImages] = useState(Dimensions.get("window").width > 600 ? product.imageURLs.large : product.imageURLs.medium);
+
     const imageWidth = Dimensions.get('window').width;
 
-    const detailIconSize = 30;
-
-    // flatlist modal numbers
-    const [quantityNumberList, setQuantityNumberList] = useState([1]);
-    // const [quantityNumberList, setQuantityNumberList] = useState([{ id: "1", value: 1 }]);
+    // change quantity flatlist numbers choice list data
+    const [quantityNumberList, setQuantityNumberList] = useState([]);
     useEffect(() => {
         setQuantityNumberList([...Array(product.stock).keys()]);
     }, [cartItem]);
 
+    //quantity modal
+    const QuantitySelectorModal = () => (
+        <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
+            <View>
+                <FlatList data={quantityNumberList} keyExtractor={(item, index) => index.toString()} renderItem={
+                    itemData => {
+                        return (
+                            <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
+                                onPress={() => { dispatch(updateCartQuantity(productId, itemData.item)); setModalVisible(false) }}>
+                                <View style={{ alignItems: "center", padding: 10 }}>
+                                    <P>{itemData.item}</P>
+                                </View>
+                                <HorizontalLine style={{ borderColor: "grey" }} />
+                            </TouchableOpacity>
+                        );
+                    }
+                }
+                />
+            </View>
+        </CenteredModal>
+    );
 
-
-    //horizontal flatlists
-    const renderProductImage = itemData => {
+    //horizontal image flatlists render item
+    const renderProductImage = ({ item, index }) => {
         return (
-            <Image source={{ uri: itemData.item }} defaultSource={require("../assets/placeholder.png")} style={{ width: imageWidth, height: imageWidth }} />
+            <Image source={{ uri: item }} style={{ width: imageWidth, height: imageWidth }} />
         );
     };
-
-    const QuantitySelectorModal = () => (
-            <CenteredModal visible={modalVisible} style={styles.modalView} close={() => { setModalVisible(false) }}>
-                <View>
-                    <FlatList data={quantityNumberList} keyExtractor={(item, index) => index.toString()} renderItem={
-                        itemData => {
-                            return (
-                                <TouchableOpacity style={{ height: 40, backgroundColor: itemData.item === cartItem.quantity ? theme.colors.tint : theme.colors.card }}
-                                    onPress={() => { dispatch(updateCartQuantity(productId, itemData.item)); setModalVisible(false) }}>
-                                    <View style={{ alignItems: "center", padding: 10 }}>
-                                        <P>{itemData.item}</P>
-                                    </View>
-                                    <HorizontalLine style={{ borderColor: "grey" }} />
-                                </TouchableOpacity>
-                            );
-                        }
-                    }
-                    />
-                </View>
-            </CenteredModal>
-        );
 
     //Homepage JSX
 
     const loadedView = () => (
 
         <View style={styles.screen}>
-            <QuantitySelectorModal/>
+            <QuantitySelectorModal />
             <ScrollView style={styles.screen} keyboardShouldPersistTaps="never">
 
                 {/* images */}
@@ -114,8 +109,8 @@ const ProductScreen = ({ route, navigation }) => {
 
                     <Card style={{ ...styles.card, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                         <FlatList
-                            data={Dimensions.get("window").width > 600 ? product.imageURLs.large : product.imageURLs.medium}
-                            // keyExtractor={item => item}
+                            data={images}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={renderProductImage}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
@@ -151,7 +146,6 @@ const ProductScreen = ({ route, navigation }) => {
                         </View>
                     </Card>
                 </View>
-
                 <Card style={{ ...styles.screenPadding, ...styles.card, ...styles.marginVertical }}>
                     <View style={styles.cardSection}>
                         <H2>{product.name}</H2>
@@ -159,10 +153,7 @@ const ProductScreen = ({ route, navigation }) => {
                     <View style={styles.cardSection}>
                         <H3>£{product.price}</H3>
                     </View>
-
                     <P>{product.description}</P>
-
-
                 </Card>
                 <Card style={{ ...styles.screenPadding, ...styles.card, ...styles.marginVertical }}>
                     <View style={styles.cardSection}>
@@ -200,6 +191,7 @@ const ProductScreen = ({ route, navigation }) => {
             </ScrollView>
         </View>
     );
+
     return <ReduxActionDependencyLoading ref={dependencyLoaderRef} loadedView={loadedView} dependencies={loadingDependencies} />
 };
 
