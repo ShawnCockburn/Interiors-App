@@ -106,7 +106,8 @@ const getAllPromotions = async (userId, authToken) => {
         return new Promotion(
             promotion._id,
             promotion.title,
-            promotion.imageURL
+            promotion.imageURL,
+            promotion.productIds
         );
     });
 };
@@ -120,7 +121,8 @@ const getAllCategories = async (userId, authToken) => {
         return new Category(
             category._id,
             category.title,
-            category.imageURL
+            category.imageURL,
+            category.productIds
         );
     });
 };
@@ -208,7 +210,7 @@ export const API_DATA = {
     },
     Categories: {
         get: {
-            all: getAllPromotions
+            all: getAllCategories
         }
     }
 };

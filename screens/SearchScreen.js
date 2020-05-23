@@ -12,9 +12,6 @@ import ImageCard from "../components/ImageCard";
 import { SearchItem, searchItemType } from '../models/searchItemModel';
 import QrScanner from '../components/QrScanner';
 
-
-
-
 const SearchScreen = ({ route, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
 

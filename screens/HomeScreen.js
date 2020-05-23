@@ -28,29 +28,33 @@ const HomeScreen = ({ route, navigation }) => {
     const renderCategory = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
-            <View style={styles.flatListHorizontalElementConstainer}>
-                <ImageCard width={120} height={100} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
-                <Card style={{ ...styles.trendingProductText, width: 120 }}>
-                    <P>
-                        {itemData.item.title}
-                    </P>
-                </Card>
-            </View>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", { productIds: itemData.item.productIds, title: itemData.item.title })}>
+                <View style={styles.flatListHorizontalElementConstainer}>
+                    <ImageCard width={120} height={100} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+                    <Card style={{ ...styles.trendingProductText, width: 120 }}>
+                        <P>
+                            {itemData.item.title}
+                        </P>
+                    </Card>
+                </View>
+            </TouchableWithoutFeedback>
         );
     };
     const renderPromotion = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", { productIds: itemData.item.productIds, title: itemData.item.title })}>
             <View style={styles.flatListHorizontalElementConstainer}>
                 <ImageCard width={180} height={120} source={itemData.item.imageURL} />
             </View>
+            </TouchableWithoutFeedback>
         );
     };
     const renderRange = itemData => {
         //todo: style this component for differnt screen sizes 
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", { productIds: itemData.item.productIds, title: itemData.item.name })}>
-                <View style={{ ...styles.flatListHorizontalElementConstainer, ...styles.bottomHlist }}>
+                <View style={{ ...styles.flatListHorizontalElementConstainer }}>
                     <ImageCard width={180} height={120} source={itemData.item.imageURL} style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
                     <Card style={{ ...styles.trendingProductText, width: 180 }}>
                         <H3>
@@ -131,7 +135,7 @@ const HomeScreen = ({ route, navigation }) => {
         </ScrollView>
     );
 
-    return <ReduxActionDependencyLoading loadedView={loadedView} dependencies={loadingDependencies}/>
+    return <ReduxActionDependencyLoading loadedView={loadedView} dependencies={loadingDependencies} />
 };
 
 const styles = StyleSheet.create({
@@ -161,7 +165,8 @@ const styles = StyleSheet.create({
     flatListHorizontalElementConstainer: {
         // paddingHorizontal: 10,
         padding: 10,
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: 15
     },
     trendingProductText: {
         paddingHorizontal: 10,
@@ -169,9 +174,6 @@ const styles = StyleSheet.create({
         alignContent: "center",
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0
-    },
-    bottomHlist: {
-        paddingBottom: 15
     }
 });
 
