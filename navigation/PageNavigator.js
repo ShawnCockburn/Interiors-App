@@ -16,7 +16,6 @@ import ProductScreen from "../screens/ProductScreen";
 import AuthScreen from "../screens/AuthScreen";
 import { reAuthUser } from "../store/actions/user";
 import LoadingView from "../components/LoadingView";
-import { authTokenIsExpired } from "../data/user";
 
 
 const Stack = createStackNavigator();
@@ -80,7 +79,7 @@ export default () => {
     const UserStack = () => {
         return (
             <Stack.Navigator initialRouteName="User">
-                <Stack.Screen name="User" component={UserScreen} />
+                <Stack.Screen name="User" component={UserScreen} options={{ title: 'Your Account' }}/>
             </Stack.Navigator>
         );
     };
@@ -130,12 +129,6 @@ export default () => {
         return isLoading ? <LoadingStack /> :
             user.idToken !== undefined ? BottomTabs : UserAuthStack;
     };
-
-    // const userAuthCheck = () => {
-    //     // if (authTokenIsExpired(user.expiresOn)) {console.log("user expired, re authenticating"); dispatch(reAuthUser());}
-    //     console.log("user expired, re authenticating");
-    // };
-    // userAuthCheck();
 
     return (
         <AppearanceProvider>

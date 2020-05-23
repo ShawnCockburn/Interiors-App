@@ -64,7 +64,7 @@ const ProductScreen = ({ route, navigation }) => {
     // change quantity flatlist numbers choice list data
     const [quantityNumberList, setQuantityNumberList] = useState([]);
     useEffect(() => {
-        setQuantityNumberList([...Array(product.stock).keys()]);
+        setQuantityNumberList([...Array(product.stock).keys()].map(num => num + 1));
     }, [cartItem]);
 
     //quantity modal

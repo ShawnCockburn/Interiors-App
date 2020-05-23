@@ -5,6 +5,7 @@ import Range from "../models/rangeModel";
 import Promotion from "../models/promotionModel";
 import Category from "../models/categoryModel";
 import CartItem from "../models/cartItemModel";
+import UserData from "../models/userDataModel";
 
 //api request
 export const API_BASE_URL = "http://192.168.1.108:3000";
@@ -184,6 +185,37 @@ const deleteCartItem = async (userId, authToken, cartItem ) => {
     return updateCart( userId, authToken, cartItem, "DELETE");
 };
 
+const getUserData = async (userId, authToken) => {
+    const res = await apiRequest(API_ROUTES.USER.ROOT, userId, authToken);
+    const resData = await res.json();
+    if (!resData) return;
+
+    return new UserData(
+        resData.userId,
+        resData.name,
+        resData.email,
+        resData.orders,
+        resData.preferences
+    );
+};
+
+const setUserData = async ( userId, authToken, userData ) => {
+
+    const body = JSON.stringify(userData);
+
+    const res = await apiRequest(API_ROUTES.USER.ROOT, userId, authToken, "POST", body);
+    const resData = await res.json();
+    if (!resData) return;
+
+    return new UserData(
+        resData.userId,
+        resData.name,
+        resData.email,
+        resData.orders,
+        resData.preferences
+    );
+};
+
 export const API_DATA = {
     Products: {
         get: {
@@ -212,5 +244,9 @@ export const API_DATA = {
         get: {
             all: getAllCategories
         }
+    },
+    User: {
+        get: getUserData,
+        set: setUserData
     }
 };

@@ -7,6 +7,7 @@ import * as rangeActions from "../store/actions/ranges";
 import * as promotionActions from "../store/actions/promotions";
 import * as cartActions from "../store/actions/cart";
 import * as categoryActions from "../store/actions/categories";
+import { getUserData } from "../store/actions/user";
 import { useDispatch } from "react-redux";
 
 import P from "../components/P";
@@ -16,7 +17,8 @@ import ImageCard from "../components/ImageCard";
 import Card from '../components/Card';
 import ReduxActionDependencyLoading from '../components/ReduxActionDependencyLoading';
 
-const loadingDependencies = [productActions.fetchProducts, rangeActions.fetchRanges, promotionActions.fetchPromotions, cartActions.getCart, categoryActions.fetchCategories];
+const loadingDependencies = [getUserData /*!!!!USER DATA MUST BE FIRST TO LOAD, *CartActions* depends on data from user if the user was created on firebase auth without userdata on api server!!!!*/,
+    productActions.fetchProducts, rangeActions.fetchRanges, promotionActions.fetchPromotions, cartActions.getCart, categoryActions.fetchCategories];
 
 const HomeScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
@@ -44,9 +46,9 @@ const HomeScreen = ({ route, navigation }) => {
         //todo: style this component for differnt screen sizes 
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate("ProductList", { productIds: itemData.item.productIds, title: itemData.item.title })}>
-            <View style={styles.flatListHorizontalElementConstainer}>
-                <ImageCard width={180} height={120} source={itemData.item.imageURL} />
-            </View>
+                <View style={styles.flatListHorizontalElementConstainer}>
+                    <ImageCard width={180} height={120} source={itemData.item.imageURL} />
+                </View>
             </TouchableWithoutFeedback>
         );
     };

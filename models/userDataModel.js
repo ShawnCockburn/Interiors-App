@@ -1,12 +1,10 @@
 class User {
-    constructor(idToken, email, refreshToken, expiresIn, localId, registered, expiresOn) {
-        this.idToken = idToken;
+    constructor(userId, name, email, orders, preferences) {
+        this.userId = userId;
+        this.name = name;
         this.email = email;
-        this.refreshToken = refreshToken;
-        this.expiresIn = expiresIn;
-        this.localId = localId;
-        this.registered = registered;
-        this.expiresOn = expiresOn;
+        this.orders = orders;
+        this.preferences = preferences;
     }
 }
 

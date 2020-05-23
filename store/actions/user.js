@@ -1,9 +1,15 @@
 import { authenticateUser, reAuthenticateUser, calculateUserAuthExpireSafe } from "../../data/user";
 import * as SecureStore from 'expo-secure-store';
-import User from "../../models/userModel";
+import User from "../../models/userAuthModel";
+import UserData from "../../models/userDataModel";
 
 export const SET_USER = "SET_USER";
 export const AUTH_USER = "AUTH_USER";
+
+export const SET_USER_DATA = "SET_USER_DATA";
+
+
+// auth user
 
 export const setUser = (user) => {
     return { type: SET_USER, user: user }
@@ -63,5 +69,25 @@ export const logoutUser = () => {
     return async dispatch => {
         SecureStore.deleteItemAsync("user");
         dispatch({ type: SET_USER, user: new User() });
+    }
+};
+
+//user data
+
+export const getUserData = () => {
+    return async (dispatch, getState, API) => {
+        const state = getState();
+        const {idToken, localId} = state.user.user;
+        const fetchedUser = await API.API_DATA.User.get(localId, idToken);
+        if (fetchedUser) dispatch({ type: SET_USER_DATA, userData: fetchedUser });
+    };
+};
+
+export const setUserData = (userData) => {
+    return async (dispatch, getState, API) => {
+        const state = getState();
+        const {idToken, localId} = state.user.user;
+        const fetchedUser = await API.API_DATA.User.set(localId, idToken, userData);
+        if (fetchedUser) dispatch({ type: SET_USER_DATA, userData: fetchedUser });
     }
 };
