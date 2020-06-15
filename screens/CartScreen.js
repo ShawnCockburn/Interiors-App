@@ -66,7 +66,7 @@ const CartScreen = ({ route, navigation }) => {
             return (
                 <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.productId, title: product.code })}>
                     <View style={{ ...styles.cartItemElementConstainer, backgroundColor: theme.colors.background }}>
-                        <ImageCard source={product.imageURLs.small[0]} width={80} height={80} />
+                        <ImageCard source={product.imageURLs[0]} width={80} height={80} />
                         <View style={{ flex: 1 }}>
                             <View style={styles.innerCartItemText} >
                                 <P>

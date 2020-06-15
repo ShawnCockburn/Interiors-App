@@ -27,7 +27,7 @@ const ProductListScreen = ({ route, navigation }) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate("Product", { productId: itemData.item.id, title: itemData.item.code })}>
                 <View style={styles.productContainer}>
-                    <ImageCard width={150} height={150} source={itemData.item.imageURLs.small[0]} />
+                    <ImageCard width={150} height={150} source={itemData.item.imageURLs[0]} />
                     <View style={{ ...styles.productText, width: 150 }}>
                     <HorizontalLine style={styles.horizontalLine}/>
                         <P>{itemData.item.name}</P>

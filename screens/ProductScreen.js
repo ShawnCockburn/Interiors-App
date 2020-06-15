@@ -24,7 +24,6 @@ import CenteredModal from "../components/CenteredModal";
 import HorizontalLine from "../components/HorizontalLine";
 
 import ReduxActionDependencyLoading from '../components/ReduxActionDependencyLoading';
-import LoadingView from '../components/LoadingView';
 
 const loadingDependencies = [productActions.fetchProducts, cartActions.getCart];
 
@@ -56,8 +55,6 @@ const ProductScreen = ({ route, navigation }) => {
         state.products.availableProducts.find(prod => prod.id === productId));
     const cartItem = useSelector(state =>
         state.cart.items.find(prod => prod.productId === productId));
-
-    const [images, setImages] = useState(Dimensions.get("window").width > 600 ? product.imageURLs.large : product.imageURLs.medium);
 
     const imageWidth = Dimensions.get('window').width;
 
@@ -109,7 +106,7 @@ const ProductScreen = ({ route, navigation }) => {
 
                     <Card style={{ ...styles.card, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                         <FlatList
-                            data={images}
+                            data={product.imageURLs}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={renderProductImage}
                             horizontal={true}

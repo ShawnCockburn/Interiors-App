@@ -45,7 +45,7 @@ const SearchScreen = ({ route, navigation }) => {
             const name = _.toLower(product.name);
             return (product.id === searchQuery || code === searchQuery || name.includes(searchQuery));
         }).map(product => {
-            return new SearchItem(product.id, product.name, product.description, product.price, product.imageURLs.small[0], product, searchItemType.PRODUCT);
+            return new SearchItem(product.id, product.name, product.description, product.price, product.imageURLs[0], product, searchItemType.PRODUCT);
         });
         return searchItems;
     };
