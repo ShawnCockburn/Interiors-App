@@ -3,7 +3,7 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 
 import { Theme } from "../constants/Theme";

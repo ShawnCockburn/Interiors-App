@@ -1,5 +1,3 @@
-import * as HttpStatus from 'http-status-codes';
-
 import Product from "../models/productModel";
 import Range from "../models/rangeModel";
 import Promotion from "../models/promotionModel";
@@ -7,8 +5,11 @@ import Category from "../models/categoryModel";
 import CartItem from "../models/cartItemModel";
 import UserData from "../models/userDataModel";
 
-//api request
-export const API_BASE_URL = "http://192.168.1.108:3000";
+//REST api request
+// testing on local network with expo
+export const API_BASE_URL = "http://192.168.1.108:3000/api"; 
+//production api url
+// export const API_BASE_URL = "https://www.hill-interiors.app.shawncockburn.co.uk/api"; 
 export const API_ROUTES = {
     CART: {
         ROOT: "/cart"
