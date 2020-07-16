@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, View, Image, Alert, Platform } from 'react-native';
+import { StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, View, Image, Alert, Platform, Dimensions } from 'react-native';
 import _ from "lodash";
 import { Feather } from '@expo/vector-icons';
 import { useDispatch } from "react-redux";
@@ -9,6 +9,8 @@ import P from '../components/P';
 import TextInputCard from '../components/TextInputCard';
 import HapticButton from '../components/HapticButton';
 import { authUser } from '../store/actions/user';
+
+const windowHeight = Dimensions.get('window').height;
 
 const AuthScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
@@ -71,9 +73,11 @@ const AuthScreen = ({ route, navigation }) => {
                     <HapticButton style={{ ...styles.submitButton, backgroundColor: theme.colors.tint }} onPress={() => (checkCredentials())}><P>Login</P></HapticButton>
 
                 </View>
+
                 <View style={Platform.OS === "ios" ? styles.imageContainerIos : styles.imageContainerAndroid}>
                     <Image source={require("../assets/hill-logo.png")} style={{ flexShrink: 1, width: 150 }} resizeMode={"contain"} />
                 </View>
+
             </KeyboardAvoidingView>
 
         </TouchableWithoutFeedback>
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
     inputArea: {
         paddingHorizontal: 30,
         marginHorizontal: 15,
-        marginTop: "45%",
+        marginTop: windowHeight/3,
         maxWidth: 600,
         alignSelf: "center"
     },
