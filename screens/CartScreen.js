@@ -75,7 +75,7 @@ const CartScreen = ({ route, navigation }) => {
                             </View>
                             <View style={styles.innerCartItemText} >
                                 <P>
-                                    £{itemData.item.quantity * product.price}
+                                    £{(itemData.item.quantity * product.price).toFixed(2)}
                                 </P>
                             </View>
                         </View>

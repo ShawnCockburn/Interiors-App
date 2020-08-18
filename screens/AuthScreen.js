@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     inputArea: {
         paddingHorizontal: 30,
         marginHorizontal: 15,
-        marginTop: windowHeight/3,
+        marginTop: Platform.OS === "ios" ? windowHeight/3 : "50%",
         maxWidth: 600,
         alignSelf: "center"
     },

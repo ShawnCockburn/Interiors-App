@@ -91,7 +91,8 @@ const SearchScreen = ({ route, navigation }) => {
         if (productExists) {
             onSubmitSearch(id);
             setModalVisible(false);
-            navigation.navigate("Product", { productId: id });
+            const foundProduct = allProducts.find(product => product.id === id);
+            navigation.navigate("Product", { productId: id, title: foundProduct.code });
         } else {
             const AsyncAlert = async () => new Promise((resolve) => {
                 Alert.alert(

@@ -7,7 +7,7 @@ import UserData from "../models/userDataModel";
 
 //REST api request
 // testing on local network with expo
-export const API_BASE_URL = "http://192.168.1.108:3000/api"; 
+export const API_BASE_URL = "http://172.20.10.2:3000/api"; 
 //production api url
 // export const API_BASE_URL = "https://www.hill-interiors.app.shawncockburn.co.uk/api"; 
 export const API_ROUTES = {
