@@ -27,4 +27,4 @@ React-Native App for wholesale interiors eCommerce.
 <img src="https://media0.giphy.com/media/UHy2We76jgfe1ZnXWd/giphy.gif" width=300/>
 
 
-👉 This app is a proof of concept and will no longer be activly developed by me but feel free to fork and or drop PR with improvments/features!
+👉 This app is a proof of concept and will no longer be actively developed by me but feel free to fork and or drop PR with improvments/features!
